@@ -301,10 +301,12 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .hero__frame:hover img { transform: scale(1.04); }
 .hero__frame--main {
   top: 40px; right: 0; width: 86%; height: 70%;
+  z-index: 1;   /* own stacking context: keeps its sprockets contained */
   box-shadow: 0 40px 80px -28px rgba(28,43,49,0.28);
 }
 .hero__frame--sub {
   bottom: 0; left: 0; width: 44%; height: 36%;
+  z-index: 2;   /* sits cleanly above the main frame and its sprockets */
   box-shadow: 0 30px 60px -22px rgba(28,43,49,0.22);
 }
 .hero__frame-label {
