@@ -8,11 +8,4 @@ CLAUDE.md
 
 # Local preview / browser-automation artifacts
 .playwright-mcp/
-cols.png
-contact.png
-contact2.png
-contact3.png
-cta.png
-footer.png
-footer2.png
-form.png
+/*.png

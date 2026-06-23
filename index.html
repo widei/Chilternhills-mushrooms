@@ -55,7 +55,7 @@
 html { scroll-behavior: smooth; }
 
 /* anchor targets clear the fixed nav */
-.section, .apothecary, .forage, [id] { scroll-margin-top: 96px; }
+.section, .apothecary, [id] { scroll-margin-top: 96px; }
 
 body {
   background: var(--bg);
@@ -69,7 +69,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-img { display: block; max-width: 100%; height: auto; }
+img { display: block; max-width: 100%; height: auto; image-orientation: from-image; }
 
 a { color: inherit; text-decoration: none; }
 
@@ -316,6 +316,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--cream);
   background: rgba(13,15,11,0.72);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   padding: 5px 9px;
 }
@@ -574,6 +575,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--cream);
   background: rgba(13,15,11,0.6);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   padding: 6px 10px;
   border: 1px solid rgba(237,229,211,0.14);
@@ -590,6 +592,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   color: var(--ink);
   background: rgba(241,235,217,0.94);
   padding: 6px 14px;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(28,43,49,0.15);
 }
@@ -778,67 +781,6 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 @media (max-width: 900px) {
   .apothecary__grid { grid-template-columns: 1fr; }
-}
-
-/* ====== FORAGE ====== */
-.forage {
-  position: relative;
-  overflow: hidden;
-  padding: 180px var(--pad);
-}
-.forage__bg {
-  position: absolute; inset: 0; z-index: 0;
-  background:
-    linear-gradient(to bottom, var(--bg) 0%, rgba(241,235,217,0.64) 24%, rgba(241,235,217,0.5) 50%, rgba(241,235,217,0.92) 84%, var(--bg) 100%),
-    url("https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/49319b0b-30d3-4896-8d61-a9c4742a3ee4/IMG_0763.jpeg") center/cover;
-  filter: saturate(0.92) contrast(1.0);
-}
-.forage__inner {
-  position: relative; z-index: 2;
-  max-width: var(--maxw); margin: 0 auto;
-}
-.forage__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: end;
-}
-.forage__h {
-  font-family: var(--ff-display);
-  font-variation-settings: "opsz" 144, "SOFT" 60;
-  font-weight: 300;
-  font-size: clamp(48px, 7vw, 120px);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-}
-.forage__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; display: block; }
-.forage__body {
-  color: var(--ink);
-  font-size: 18px;
-  line-height: 1.65;
-  max-width: 48ch;
-  margin-bottom: 32px;
-}
-.forage__details {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 40px;
-}
-.forage__details > div { padding-top: 20px; border-top: 1px solid var(--rule); }
-.forage__details .k {
-  font-family: var(--ff-mono);
-  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--amber);
-  margin-bottom: 8px;
-}
-.forage__details .v {
-  font-family: var(--ff-display);
-  font-size: 22px; letter-spacing: -0.01em;
-}
-@media (max-width: 900px) {
-  .forage__grid { grid-template-columns: 1fr; }
-  .forage__details { grid-template-columns: 1fr 1fr; }
 }
 
 /* ====== ORDER ====== */
@@ -1362,7 +1304,6 @@ details.faq__item .answer {
     <a href="#story">Story</a>
     <a href="#harvest">Harvest</a>
     <a href="#apothecary">Apothecary</a>
-    <a href="#forage">Foraging</a>
     <a href="#faq">FAQ</a>
   </div>
   <a href="#order" class="nav__cta">Order →</a>
@@ -1403,14 +1344,14 @@ details.faq__item .answer {
 
     <div class="hero__frame hero__frame--main">
       <div class="sprocket sprocket--top"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-      <img src="https://img1.wsimg.com/isteam/ip/9228ed1c-0306-4cdf-9812-13fbf2a978b0/downloads/adde7588-5ced-432b-93e7-43dfdf25b80d/IMG_1282.JPG" alt="A flush of cultivated mushrooms harvested on the farm" />
+      <img src="uploads/IMG_1282.JPG" alt="A flush of cultivated mushrooms harvested on the farm" />
       <div class="hero__frame-label">Cam A · Fruiting Room 02</div>
       <div class="sprocket sprocket--bot"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     </div>
 
     <div class="hero__frame hero__frame--sub">
       <div class="sprocket sprocket--top"><span></span><span></span><span></span><span></span><span></span></div>
-      <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/ab6fc2c0-d42e-4296-838c-b7a297802ec5/IMG_0903.jpeg" alt="Lion's Mane mushroom close-up" />
+      <img src="uploads/IMG_0903.jpeg" alt="Lion's Mane mushroom close-up" />
       <div class="hero__frame-label">Lion's Mane · Hand-cut</div>
       <div class="sprocket sprocket--bot"><span></span><span></span><span></span><span></span><span></span></div>
     </div>
@@ -1441,7 +1382,7 @@ details.faq__item .answer {
 <section class="section story" id="story">
   <div class="story__img-wrap reveal">
     <div class="story__img">
-      <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/8e5740da-7ac3-44b4-bb97-e28988e76865/IMG_0819.jpeg" alt="Iain Mitchell, the Head Fun-guy, at work in the growing rooms" />
+      <img src="uploads/IMG_0819.jpeg" alt="Iain Mitchell, the Head Fun-guy, at work in the growing rooms" />
     </div>
     <div class="story__caption">
       <span>Iain Mitchell · The Head Fun-guy</span>
@@ -1464,7 +1405,7 @@ details.faq__item .answer {
     <div class="story__body">
       <p class="dropcap reveal" style="--d:.15s">Iain Mitchell spent a thirty-five-year career splicing together some of the most-watched television in Britain — an award-winning film editor whose final commission, fittingly, was a certain farming series you may have heard of. Somewhere between the Clarkson fields and the farm-shop walk-ins, a question took root. <em>What if the thing on the chopping board came from fifty feet away, not five thousand miles?</em></p>
 
-      <p class="reveal" style="--d:.2s">In October 2025, he swapped the edit suite for a growing room on Bottom Road, West Wycombe. Six varieties. Hand-cut. Harvested at dawn, in the kitchen by lunch. Mycelium grown on locally-sourced substrate. Fruiting rooms dialed in like an audio mix — humidity, CO₂, temperature, light. Nothing flown. Nothing forgotten in transit.</p>
+      <p class="reveal" style="--d:.2s">In October 2025, he swapped the edit suite for a growing room in West Wycombe. Six varieties. Hand-cut. Harvested at dawn, in the kitchen by lunch. Mycelium grown on locally-sourced substrate. Fruiting rooms dialed in like an audio mix — humidity, CO₂, temperature, light. Nothing flown. Nothing forgotten in transit.</p>
 
       <blockquote class="story__pull reveal" style="--d:.25s">
         "I spent thirty-five years making pictures move. Now I'm watching mushrooms grow. Honestly? Both feel like magic."
@@ -1512,7 +1453,7 @@ details.faq__item .answer {
     <article class="card reveal">
       <div class="card__img">
         <span class="card__no">No. 01</span>
-        <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/ab6fc2c0-d42e-4296-838c-b7a297802ec5/IMG_0903.jpeg" alt="Lion's Mane" />
+        <img src="uploads/IMG_0903.jpeg" alt="Lion's Mane" />
         <span class="card__price-tag">£30 / kg</span>
       </div>
       <div class="card__row">
@@ -1526,7 +1467,7 @@ details.faq__item .answer {
     <article class="card reveal" style="--d:.1s">
       <div class="card__img">
         <span class="card__no">No. 02</span>
-        <img src="https://img1.wsimg.com/isteam/getty/1180089653" alt="King Oyster" />
+        <img src="uploads/getty-1180089653.jpg" alt="King Oyster" />
         <span class="card__price-tag">£28 / kg</span>
       </div>
       <div class="card__row">
@@ -1540,7 +1481,7 @@ details.faq__item .answer {
     <article class="card reveal" style="--d:.2s">
       <div class="card__img">
         <span class="card__no">No. 03</span>
-        <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/49319b0b-30d3-4896-8d61-a9c4742a3ee4/IMG_0763.jpeg" alt="Grey Oyster" />
+        <img src="uploads/IMG_0763.jpeg" alt="Grey Oyster" />
         <span class="card__price-tag">£24 / kg</span>
       </div>
       <div class="card__row">
@@ -1554,7 +1495,7 @@ details.faq__item .answer {
     <article class="card reveal">
       <div class="card__img">
         <span class="card__no">No. 04</span>
-        <img src="https://img1.wsimg.com/isteam/getty/1487104488" alt="Shiitake" />
+        <img src="uploads/getty-1487104488.jpg" alt="Shiitake" />
         <span class="card__price-tag">£24 / kg</span>
       </div>
       <div class="card__row">
@@ -1568,7 +1509,7 @@ details.faq__item .answer {
     <article class="card reveal" style="--d:.1s">
       <div class="card__img">
         <span class="card__no">No. 05</span>
-        <img src="https://img1.wsimg.com/isteam/getty/2233604126" alt="Speckled Chestnut" />
+        <img src="uploads/getty-2233604126.jpg" alt="Speckled Chestnut" />
         <span class="card__price-tag">£22 / kg</span>
       </div>
       <div class="card__row">
@@ -1582,7 +1523,7 @@ details.faq__item .answer {
     <article class="card reveal" style="--d:.2s">
       <div class="card__img">
         <span class="card__no">No. 06</span>
-        <img src="https://img1.wsimg.com/isteam/getty/2233774959" alt="Golden Oyster" />
+        <img src="uploads/getty-2233774959.jpg" alt="Golden Oyster" />
         <span class="card__price-tag">£22 / kg</span>
       </div>
       <div class="card__row">
@@ -1606,7 +1547,7 @@ details.faq__item .answer {
 
     <div class="apothecary__grid">
       <div class="apothecary__img reveal">
-        <img src="https://img1.wsimg.com/isteam/ip/9228ed1c-0306-4cdf-9812-13fbf2a978b0/downloads/6244238d-d10c-4bc9-a1e6-db8d20e499b1/everything_bundle_new.png.webp" alt="Bristol Fungarium tinctures and Chiltern Hills complementary products" />
+        <img src="uploads/everything_bundle_new.png.webp" alt="Bristol Fungarium tinctures and Chiltern Hills complementary products" />
       </div>
 
       <div class="apothecary__text reveal" style="--d:.1s">
@@ -1665,49 +1606,6 @@ details.faq__item .answer {
 </section>
 
 <!-- ====== FORAGE ====== -->
-<section class="forage" id="forage">
-  <div class="forage__bg"></div>
-  <div class="forage__inner">
-    <div class="chapter reveal">
-      <span class="no">Reel 05</span>
-      <span>Into the woods</span>
-    </div>
-
-    <div class="forage__grid">
-      <h2 class="forage__h reveal" style="--d:.1s">
-        Foraging<br>
-        <em>workshops</em><br>
-        <em>in the Chilterns.</em>
-      </h2>
-      <div class="reveal" style="--d:.2s">
-        <p class="forage__body">
-          A small-group walk through the beech woods above the farm with Iain and a flask of something warm. Learn what to look for, what to leave, and how to cook the ten or so edibles that reliably turn up on a Chiltern autumn morning. Flat shoes. Sharp eyes. Empty basket.
-        </p>
-
-        <div class="forage__details">
-          <div>
-            <div class="k">Season</div>
-            <div class="v">Sep — Nov</div>
-          </div>
-          <div>
-            <div class="k">Group size</div>
-            <div class="v">Max 8</div>
-          </div>
-          <div>
-            <div class="k">Meeting point</div>
-            <div class="v">HP14 4BS</div>
-          </div>
-        </div>
-
-        <a href="#order" class="btn btn--primary">
-          Enquire about workshops
-          <span class="arrow">→</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ====== ORDER ====== -->
 <section class="section order" id="order">
   <div class="chapter reveal">
@@ -1720,7 +1618,7 @@ details.faq__item .answer {
     <em>get them home.</em>
   </h2>
   <p class="order__lede reveal" style="--d:.15s">
-    Drop a line before Thursday 8pm to be on the weekend harvest list. We'll confirm by return with what's ready, when to expect it, and how to pay (bank transfer, cash on delivery, or card at the farm gate).
+    Drop a line before Thursday 8pm to be on the weekend harvest list. We'll confirm by return with what's ready, when to expect it, and how to pay (bank transfer or cash on delivery).
   </p>
 
   <div class="order__grid">
@@ -1739,10 +1637,10 @@ details.faq__item .answer {
     </div>
 
     <div class="order__card reveal" style="--d:.2s">
-      <div class="no">03 / Farm Gate</div>
-      <h4>Or <em>come and visit.</em></h4>
-      <p>Collect in person from Bottom Road, West Wycombe. Peek at the growing rooms, pick out what you fancy, and leave with cash, card or a handshake.</p>
-      <a class="link" href="https://maps.google.com/?q=HP14+4BS" target="_blank" rel="noopener">Bottom Road, HP14 4BS →</a>
+      <div class="no">03 / Visit</div>
+      <h4>Or <em>arrange a visit.</em></h4>
+      <p>Like to see the growing rooms and collect in person? Visits are by arrangement — contact Iain and he'll set a time that works to come to the farm.</p>
+      <a class="link" href="#contact">Contact Iain to arrange →</a>
     </div>
   </div>
 
@@ -1795,13 +1693,13 @@ details.faq__item .answer {
   <div class="contact reveal" id="contact">
     <figure class="contact__map">
       <iframe
-        title="Map to Chiltern Hills Mushrooms, Bottom Road, West Wycombe, HP14 4BS"
-        src="https://maps.google.com/maps?q=Bottom%20Road%2C%20West%20Wycombe%2C%20HP14%204BS&z=14&output=embed"
+        title="Map of West Wycombe in the Chiltern Hills"
+        src="https://maps.google.com/maps?q=West%20Wycombe%2C%20Buckinghamshire&z=12&output=embed"
         loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
       <figcaption class="contact__plate">
-        <span class="contact__plate-k">Find us</span>
-        <span class="contact__plate-v">Bottom Road, West Wycombe<br>HP14&nbsp;4BS</span>
-        <a class="contact__plate-link" href="https://www.google.com/maps/search/?api=1&query=Chiltern+Hills+Mushrooms+Bottom+Road+HP14+4BS" target="_blank" rel="noopener">Open in Maps ↗</a>
+        <span class="contact__plate-k">The farm</span>
+        <span class="contact__plate-v">West Wycombe<br>Chiltern Hills</span>
+        <a class="contact__plate-link" href="#contact">Contact Iain to arrange a visit ↓</a>
       </figcaption>
     </figure>
 
@@ -1881,7 +1779,7 @@ details.faq__item .answer {
     </details>
     <details class="faq__item reveal">
       <summary>What's the minimum order?</summary>
-      <div class="answer">One 200g tub of any variety for delivery; anything goes at the farm gate. For restaurants and pubs, we usually start around 2kg a week across varieties — get in touch and we'll size it to your menu.</div>
+      <div class="answer">One 200g tub of any variety for delivery. For restaurants and pubs, we usually start around 2kg a week across varieties — get in touch and we'll size it to your menu.</div>
     </details>
     <details class="faq__item reveal">
       <summary>How long will they keep?</summary>
@@ -1889,7 +1787,7 @@ details.faq__item .answer {
     </details>
     <details class="faq__item reveal">
       <summary>Can I visit the farm?</summary>
-      <div class="answer">Yes — by arrangement. Drop us an email first so Iain isn't elbow-deep in a fruiting chamber when you arrive. Foraging-workshop dates are also shared by email each autumn — just ask to be told.</div>
+      <div class="answer">Yes — by arrangement. Contact Iain first so he isn't elbow-deep in a fruiting chamber when you arrive, and he'll set a time for you to come to the farm.</div>
     </details>
     <details class="faq__item reveal">
       <summary>Do you ship nationally?</summary>
@@ -1897,7 +1795,7 @@ details.faq__item .answer {
     </details>
     <details class="faq__item reveal">
       <summary>Are the mushrooms wild-foraged?</summary>
-      <div class="answer">The six varieties on the weekly list are cultivated on the farm. The foraging workshops are where we go for the wild stuff — ceps, chanterelles, hedgehogs, horns of plenty and whatever the Chiltern woods have decided to put up that week.</div>
+      <div class="answer">No — the six varieties on the weekly list are all cultivated on the farm, grown indoors on locally-sourced substrate rather than picked from the wild. That's how we keep them consistent, clean and available every week.</div>
     </details>
     <details class="faq__item reveal">
       <summary>Do you supply trade?</summary>
@@ -1916,7 +1814,7 @@ details.faq__item .answer {
     <img src="assets/logo.png" alt="Chiltern Hills Mushrooms" />
     <div class="meta">
       <div><strong>Chiltern Hills Mushrooms</strong></div>
-      <div>Bottom Road · West Wycombe · HP14 4BS</div>
+      <div>West Wycombe · Chiltern Hills</div>
       <div>Est. MMXXV · The Head Fun-guy</div>
     </div>
   </div>
@@ -1929,25 +1827,23 @@ details.faq__item .answer {
   <div class="footer__cols">
     <div class="footer__col">
       <h5>The Farm</h5>
-      <p style="margin-bottom:16px">Chiltern Hills Mushrooms is a small-batch gourmet farm on Bottom Road, West Wycombe — growing six varieties and running foraging walks into the surrounding beech woods.</p>
+      <p style="margin-bottom:16px">Chiltern Hills Mushrooms is a small-batch gourmet farm in West Wycombe, growing six varieties of mushroom in the heart of the Chiltern Hills — cut at dawn, delivered the same day.</p>
     </div>
     <div class="footer__col">
       <h5>Explore</h5>
       <a href="#story">Our Story</a>
       <a href="#harvest">The Harvest</a>
       <a href="#apothecary">Apothecary</a>
-      <a href="#forage">Foraging</a>
       <a href="#faq">FAQ</a>
     </div>
     <div class="footer__col">
-      <h5>Find Us</h5>
+      <h5>Visit</h5>
       <address>
-        Bottom Road<br>
         West Wycombe<br>
-        HP14 4BS<br>
+        Chiltern Hills<br>
         United Kingdom
       </address>
-      <a class="footer__maplink" href="https://www.google.com/maps/search/?api=1&query=Chiltern+Hills+Mushrooms+Bottom+Road+HP14+4BS" target="_blank" rel="noopener">Open in Maps ↗</a>
+      <a class="footer__maplink" href="#contact">Contact Iain to arrange a visit ↓</a>
     </div>
     <div class="footer__col">
       <h5>Get In Touch</h5>
