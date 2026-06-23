@@ -182,6 +182,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .nav__links a:hover::after { width: 100%; }
 .nav__cta {
+  position: relative;
   font-family: var(--ff-mono);
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -193,6 +194,23 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   transition: background .3s ease;
 }
 .nav__cta:hover { background: var(--amber-hot); }
+.nav__cta-badge {
+  position: absolute;
+  top: -8px; right: -8px;
+  min-width: 20px; height: 20px;
+  padding: 0 5px;
+  display: none; align-items: center; justify-content: center;
+  background: var(--rust);
+  color: #fff;
+  border-radius: 999px;
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0; line-height: 1;
+  box-shadow: 0 2px 8px rgba(139,58,42,0.5);
+}
+.nav__cta-badge.is-on { display: inline-flex; }
+@keyframes cart-pop { 0% { transform: scale(0.6); } 60% { transform: scale(1.22); } 100% { transform: scale(1); } }
+.nav__cta-badge.pop { animation: cart-pop .28s ease; }
+@media (prefers-reduced-motion: reduce) { .nav__cta-badge.pop { animation: none; } }
 @media (max-width: 800px) {
   .nav__links { display: none; }
 }
@@ -672,6 +690,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   color: var(--ink-mute);
   border-bottom: 1px solid var(--rule);
 }
+.basket__empty a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+.basket__empty a:hover { color: var(--amber-hot); }
 .basket__sumrow {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   padding: 16px clamp(28px, 3.4vw, 48px);
@@ -1306,7 +1326,7 @@ details.faq__item .answer {
     <a href="#apothecary">Apothecary</a>
     <a href="#faq">FAQ</a>
   </div>
-  <a href="#order" class="nav__cta">Order →</a>
+  <a href="#order" class="nav__cta">Order →<span class="nav__cta-badge" id="cart-badge" aria-live="polite"></span></a>
 </nav>
 
 <!-- ====== HERO ====== -->
@@ -1666,7 +1686,7 @@ details.faq__item .answer {
       <span class="basket__subhead-v">Added from the harvest above ↑</span>
     </div>
     <div class="basket__rows" id="basket-rows" role="list">
-      <div class="basket__empty" id="basket-empty">No mushrooms yet — tap “Add” on any variety in the harvest above ↑</div>
+      <div class="basket__empty" id="basket-empty">No mushrooms yet — <a href="#harvest">tap “Add” on any variety in the harvest above ↑</a></div>
     </div>
 
     <div class="basket__subhead">
@@ -1974,6 +1994,19 @@ details.faq__item .answer {
     const weightEl = document.getElementById('basket-weight');
     const waBtn    = document.getElementById('basket-wa');
     const msgBtn   = document.getElementById('basket-msg');
+    const cartBadge = document.getElementById('cart-badge');
+    let lastCount = 0;
+    function updateBadge(n) {
+      if (!cartBadge) return;
+      cartBadge.textContent = n;
+      cartBadge.classList.toggle('is-on', n > 0);
+      if (n > lastCount) {
+        cartBadge.classList.remove('pop');
+        void cartBadge.offsetWidth;        // restart the animation
+        cartBadge.classList.add('pop');
+      }
+      lastCount = n;
+    }
     const gbp = n => '£' + n.toFixed(2);
     const state = Object.fromEntries([...HARVEST, ...TINCTURES].map(p => [p.id, 0]));
     const syncers = {};   // id -> fn that re-renders that product's own control
@@ -2077,6 +2110,7 @@ details.faq__item .answer {
       weightEl.textContent = bits.length ? bits.join(' · ') : 'Nothing picked yet';
       waBtn.disabled = !ready;
       msgBtn.disabled = !ready;
+      updateBadge(fresh.length + tinc.length);
     }
     function orderRef() {
       const d = new Date();
