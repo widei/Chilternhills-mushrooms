@@ -631,6 +631,66 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .card__foot .add {
   color: var(--ink-mute);
 }
+/* add-to-basket control inside each harvest card */
+.card__add { display: flex; align-items: center; }
+.card__addbtn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px;
+  border: 1px solid var(--amber);
+  border-radius: 2px;
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--amber); background: transparent;
+  transition: background .2s ease, color .2s ease;
+}
+.card__addbtn:hover { background: var(--amber); color: var(--bg); }
+.card__addbtn span { font-size: 13px; line-height: 1; }
+.card__step { display: none; align-items: center; gap: 8px; }
+.card__step.is-on { display: flex; }
+.card__add.is-on .card__addbtn { display: none; }
+.card__step button {
+  width: 30px; height: 30px;
+  border: 1px solid var(--rule); border-radius: 2px;
+  font-family: var(--ff-mono); font-size: 16px; line-height: 1;
+  color: var(--ink); background: var(--bg);
+  transition: border-color .2s ease, color .2s ease;
+}
+.card__step button:hover { border-color: var(--amber); color: var(--amber); }
+.card__step .q {
+  min-width: 52px; text-align: center;
+  font-family: var(--ff-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--rust);
+}
+
+/* basket summary (receipt) rows + empty state */
+.basket__empty {
+  padding: 26px clamp(28px, 3.4vw, 48px);
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-mute);
+  border-bottom: 1px solid var(--rule);
+}
+.basket__sumrow {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px clamp(28px, 3.4vw, 48px);
+  border-bottom: 1px solid var(--rule);
+}
+.basket__sumrow b {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 40, "SOFT" 40;
+  font-size: 18px; font-weight: 400; color: var(--ink);
+}
+.basket__sumrow .g {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.1em;
+  color: var(--ink-mute); margin-left: 10px;
+}
+.basket__sumright { display: flex; align-items: center; gap: 18px; }
+.basket__sumrow .ln { font-family: var(--ff-mono); font-size: 14px; color: var(--rust); }
+.basket__rm {
+  font-family: var(--ff-mono); font-size: 16px; line-height: 1;
+  color: var(--ink-mute); background: none; padding: 4px;
+  transition: color .2s ease;
+}
+.basket__rm:hover { color: var(--rust); }
 
 @media (max-width: 1000px) {
   .grid-harvest { grid-template-columns: repeat(2, 1fr); }
@@ -866,6 +926,129 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   font-variation-settings: "opsz" 144, "SOFT" 100;
   font-size: clamp(22px, 2.5vw, 32px);
   color: var(--ink);
+}
+
+/* ====== HARVEST BASKET ====== */
+.basket {
+  margin-top: 56px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+.basket__head { padding: clamp(28px, 3.4vw, 48px); border-bottom: 1px solid var(--rule); }
+.basket__head .no {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 16px;
+}
+.basket__head h3 {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60; font-weight: 300;
+  font-size: clamp(30px, 3.6vw, 48px); line-height: 0.98; letter-spacing: -0.028em;
+  margin-bottom: 16px;
+}
+.basket__head h3 em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.basket__head p { color: var(--ink-dim); font-size: 16px; max-width: 64ch; }
+.basket__window {
+  margin-top: 20px !important;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid var(--rule); border-radius: 2px;
+  background: var(--bg);
+  font-family: var(--ff-mono) !important;
+  font-size: 11px !important; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-dim) !important;
+}
+.basket__window b { color: var(--amber); font-weight: 500; }
+.basket__window::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--moss); box-shadow: 0 0 0 3px rgba(108,126,79,0.2);
+}
+.basket__window.is-closed::before { background: var(--rust); box-shadow: 0 0 0 3px rgba(139,58,42,0.2); }
+
+.basket__subhead {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  padding: 22px clamp(28px, 3.4vw, 48px) 6px;
+}
+.basket__subhead-k {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber);
+}
+.basket__subhead-v {
+  font-family: var(--ff-display); font-style: italic;
+  font-variation-settings: "opsz" 40, "SOFT" 100;
+  font-size: 16px; color: var(--ink-mute);
+}
+
+.basket__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 20px clamp(28px, 3.4vw, 48px);
+  border-bottom: 1px solid var(--rule);
+  transition: background .25s ease;
+}
+.basket__row.is-active { background: var(--bg); }
+.basket__name { display: flex; flex-direction: column; gap: 3px; }
+.basket__name b {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 40, "SOFT" 40;
+  font-size: 20px; font-weight: 400; color: var(--ink);
+}
+.basket__name span {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute);
+}
+.basket__stepper { display: flex; align-items: center; gap: 4px; }
+.basket__stepper button {
+  width: 36px; height: 36px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: var(--ff-mono); font-size: 18px; line-height: 1;
+  color: var(--ink); background: var(--bg);
+  transition: border-color .2s ease, color .2s ease;
+}
+.basket__stepper button:hover { border-color: var(--amber); color: var(--amber); }
+.basket__stepper button:disabled { opacity: .35; pointer-events: none; }
+.basket__qty {
+  min-width: 74px; text-align: center;
+  font-family: var(--ff-mono); font-size: 14px; letter-spacing: 0.04em; color: var(--ink);
+}
+.basket__line {
+  min-width: 78px; text-align: right;
+  font-family: var(--ff-mono); font-size: 14px; color: var(--ink-dim);
+}
+.basket__line.is-active { color: var(--rust); }
+
+.basket__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+  padding: clamp(24px, 3vw, 36px) clamp(28px, 3.4vw, 48px);
+}
+.basket__total { display: flex; flex-direction: column; gap: 4px; }
+.basket__total-k {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute);
+}
+.basket__total-v {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 40; font-weight: 400;
+  font-size: clamp(38px, 5vw, 56px); line-height: 0.9; color: var(--ink);
+}
+.basket__total-sub { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-mute); }
+.basket__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.basket__actions .btn:disabled { opacity: .4; pointer-events: none; }
+.basket__legal {
+  padding: 0 clamp(28px, 3.4vw, 48px) clamp(24px, 3vw, 32px);
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink-mute);
+}
+@media (max-width: 640px) {
+  .basket__row { grid-template-columns: 1fr auto; row-gap: 14px; }
+  .basket__line { grid-column: 2; }
+  .basket__foot { flex-direction: column; align-items: stretch; }
+  .basket__actions .btn { flex: 1; justify-content: center; }
 }
 
 /* ====== CONTACT — map + order slip, one block ====== */
@@ -1337,7 +1520,7 @@ details.faq__item .answer {
         <span class="card__latin">Hericium erinaceus</span>
       </div>
       <p class="card__note">Mild and sweet with a seafood-like finish — fry in brown butter and you've made crab cakes without the crab.</p>
-      <div class="card__foot"><span>Cognitive · Culinary</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Cognitive · Culinary</span><div class="card__add" data-id="lions"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.1s">
@@ -1351,7 +1534,7 @@ details.faq__item .answer {
         <span class="card__latin">Pleurotus eryngii</span>
       </div>
       <p class="card__note">The vegan scallop. Thick-stemmed, meaty, beautifully pan-seared in rings with garlic, thyme and a squeeze of lemon.</p>
-      <div class="card__foot"><span>Meaty · Show-stopper</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Meaty · Show-stopper</span><div class="card__add" data-id="king"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.2s">
@@ -1365,7 +1548,7 @@ details.faq__item .answer {
         <span class="card__latin">Pleurotus ostreatus</span>
       </div>
       <p class="card__note">Tender, velvety, unfussy. The everyday workhorse — risotto, ragù, soup, pasta, or just hot oil and salt.</p>
-      <div class="card__foot"><span>Everyday · Versatile</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Everyday · Versatile</span><div class="card__add" data-id="grey"></div></div>
     </article>
 
     <article class="card reveal">
@@ -1379,7 +1562,7 @@ details.faq__item .answer {
         <span class="card__latin">Lentinula edodes</span>
       </div>
       <p class="card__note">Deep, meaty umami. Broths, ramens, stir-fries and slow braises — the one mushroom that tastes as good dried as fresh.</p>
-      <div class="card__foot"><span>Umami · Asian Kitchen</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Umami · Asian Kitchen</span><div class="card__add" data-id="shiitake"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.1s">
@@ -1393,7 +1576,7 @@ details.faq__item .answer {
         <span class="card__latin">Pholiota nameko</span>
       </div>
       <p class="card__note">Earthy, nutty, gently peppery. A gorgeous thing with lamb, lentils, or a fat slice of sourdough and ricotta.</p>
-      <div class="card__foot"><span>Earthy · Forest-Floor</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Earthy · Forest-Floor</span><div class="card__add" data-id="chestnut"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.2s">
@@ -1407,7 +1590,7 @@ details.faq__item .answer {
         <span class="card__latin">Pleurotus citrinopileatus</span>
       </div>
       <p class="card__note">Thin-fleshed, bright-yellow, quick-cooking. Hot pan, thirty seconds a side, straight onto a garlic-rubbed bruschetta.</p>
-      <div class="card__foot"><span>Bright · Fast-Fry</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Bright · Fast-Fry</span><div class="card__add" data-id="golden"></div></div>
     </article>
 
   </div>
@@ -1565,10 +1748,48 @@ details.faq__item .answer {
 
   <div class="order__cta-block reveal">
     <p>Free delivery within 10&nbsp;miles of HP14 &mdash; always.</p>
-    <a href="#contact" class="btn btn--primary">
+    <a href="#basket" class="btn btn--primary">
       Start your order
       <span class="arrow">→</span>
     </a>
+  </div>
+
+  <!-- ====== HARVEST BASKET ====== -->
+  <div class="basket reveal" id="basket">
+    <div class="basket__head">
+      <div class="no">Your order slip</div>
+      <h3>The <em>harvest basket.</em></h3>
+      <p>Add varieties from the harvest above — adjust the weight, then send your list across. Nothing's charged here: we cut to order and confirm the final weight and how to pay by return.</p>
+      <p class="basket__window" id="basket-window"></p>
+    </div>
+
+    <div class="basket__rows" id="basket-rows" role="list">
+      <div class="basket__empty" id="basket-empty">Your basket is empty — add a variety from the harvest above ↑</div>
+    </div>
+
+    <div class="basket__subhead">
+      <span class="basket__subhead-k">The Apothecary</span>
+      <span class="basket__subhead-v">Dual-extracted tinctures · Bristol Fungarium</span>
+    </div>
+    <div class="basket__rows" id="basket-tinctures" role="list"></div>
+
+    <div class="basket__foot">
+      <div class="basket__total">
+        <span class="basket__total-k">Estimated total</span>
+        <strong class="basket__total-v" id="basket-total">£0.00</strong>
+        <span class="basket__total-sub" id="basket-weight">Nothing picked yet</span>
+      </div>
+      <div class="basket__actions">
+        <button type="button" class="btn btn--primary" id="basket-wa" disabled>
+          Order on WhatsApp
+          <span class="arrow">→</span>
+        </button>
+        <button type="button" class="btn btn--ghost" id="basket-msg" disabled>
+          Add to message below ↓
+        </button>
+      </div>
+    </div>
+    <p class="basket__legal">Minimum order 200g. Prices are per kilo, cut fresh — final figure confirmed before you pay.</p>
   </div>
 
   <div class="contact reveal" id="contact">
@@ -1822,6 +2043,204 @@ details.faq__item .answer {
       main.style.transform = '';
       sub.style.transform = '';
     });
+  }
+
+  // ====== HARVEST BASKET ======
+  // Fresh mushrooms sold by weight (£/kg, ticker prices); tinctures sold by the bottle.
+  const HARVEST = [
+    { id: 'lions',    name: "Lion's Mane",  latin: 'Hericium erinaceus',       price: 30 },
+    { id: 'king',     name: 'King Oyster',  latin: 'Pleurotus eryngii',        price: 28 },
+    { id: 'grey',     name: 'Grey Oyster',  latin: 'Pleurotus ostreatus',      price: 24 },
+    { id: 'shiitake', name: 'Shiitake',     latin: 'Lentinula edodes',         price: 24 },
+    { id: 'chestnut', name: 'Speckled Chestnut', latin: 'Pholiota nameko',     price: 22 },
+    { id: 'golden',   name: 'Golden Oyster',latin: 'Pleurotus citrinopileatus',price: 22 },
+  ];
+  const TINCTURES = [
+    { id: 't-lions',     name: "Lion's Mane Tincture", latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-reishi',    name: 'Reishi Tincture',      latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-cordyceps', name: 'Cordyceps Tincture',   latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-turkey',    name: 'Turkey Tail Tincture', latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-chaga',     name: 'Chaga Tincture',       latin: 'Bristol Fungarium · 30ml', price: 30 },
+  ];
+  const STEP = 100;        // grams per click (fresh)
+  const MIN_GRAMS = 200;   // minimum fresh order
+  const PHONE = '447949026535';
+
+  const rowsEl = document.getElementById('basket-rows');
+  if (rowsEl) {
+    const tinctureEl = document.getElementById('basket-tinctures');
+    const emptyEl  = document.getElementById('basket-empty');
+    const totalEl  = document.getElementById('basket-total');
+    const weightEl = document.getElementById('basket-weight');
+    const waBtn    = document.getElementById('basket-wa');
+    const msgBtn   = document.getElementById('basket-msg');
+    const gbp = n => '£' + n.toFixed(2);
+    const state = Object.fromEntries([...HARVEST, ...TINCTURES].map(p => [p.id, 0]));
+    const syncers = {};   // id -> fn that re-renders that product's own control
+
+    const FIRST = 200;    // first tap adds the 200g minimum tub
+    function setFresh(id, grams) { state[id] = Math.max(0, grams); syncers[id](); }
+
+    // Fresh: each harvest card carries its own add control
+    document.querySelectorAll('.card__add').forEach(el => {
+      const p = HARVEST.find(x => x.id === el.dataset.id);
+      if (!p) return;
+      el.innerHTML =
+        '<button type="button" class="card__addbtn">Add <span>+</span></button>' +
+        '<div class="card__step">' +
+          '<button type="button" aria-label="Less ' + p.name + '">−</button>' +
+          '<span class="q">0&nbsp;g</span>' +
+          '<button type="button" aria-label="More ' + p.name + '">+</button>' +
+        '</div>';
+      const addBtn = el.querySelector('.card__addbtn');
+      const step = el.querySelector('.card__step');
+      const [dec, inc] = step.querySelectorAll('button');
+      const q = step.querySelector('.q');
+      const sync = () => {
+        const g = state[p.id];
+        q.innerHTML = g + '&nbsp;g';
+        const on = g > 0;
+        el.classList.toggle('is-on', on);
+        step.classList.toggle('is-on', on);
+        recompute();
+      };
+      syncers[p.id] = sync;
+      addBtn.addEventListener('click', () => setFresh(p.id, FIRST));
+      inc.addEventListener('click', () => setFresh(p.id, state[p.id] + STEP));
+      dec.addEventListener('click', () => setFresh(p.id, state[p.id] - STEP));
+      sync();
+    });
+
+    // Tinctures: unit steppers live in the basket's apothecary sub-section
+    TINCTURES.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'basket__row';
+      row.setAttribute('role', 'listitem');
+      row.innerHTML =
+        '<div class="basket__name"><b>' + p.name + '</b><span>' + p.latin + ' · ' + gbp(p.price) + ' each</span></div>' +
+        '<div class="basket__stepper">' +
+          '<button type="button" aria-label="Less ' + p.name + '" disabled>−</button>' +
+          '<span class="basket__qty">× 0</span>' +
+          '<button type="button" aria-label="More ' + p.name + '">+</button>' +
+        '</div>' +
+        '<span class="basket__line">—</span>';
+      const [dec, inc] = row.querySelectorAll('button');
+      const qtyEl = row.querySelector('.basket__qty');
+      const lineEl = row.querySelector('.basket__line');
+      const sync = () => {
+        const v = state[p.id];
+        qtyEl.textContent = '× ' + v;
+        lineEl.textContent = v ? gbp(v * p.price) : '—';
+        lineEl.classList.toggle('is-active', v > 0);
+        row.classList.toggle('is-active', v > 0);
+        dec.disabled = v === 0;
+        recompute();
+      };
+      syncers[p.id] = sync;
+      inc.addEventListener('click', () => { state[p.id] += 1; sync(); });
+      dec.addEventListener('click', () => { state[p.id] = Math.max(0, state[p.id] - 1); sync(); });
+      tinctureEl.appendChild(row);
+    });
+
+    function freshPicked() { return HARVEST.filter(p => state[p.id] > 0)
+      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] / 1000 * p.price })); }
+    function tincPicked() { return TINCTURES.filter(p => state[p.id] > 0)
+      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] * p.price })); }
+
+    function renderSummary(fresh) {
+      rowsEl.querySelectorAll('.basket__sumrow').forEach(n => n.remove());
+      fresh.forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'basket__sumrow';
+        row.innerHTML =
+          '<div><b>' + p.name + '</b><span class="g">' + p.qty + ' g</span></div>' +
+          '<div class="basket__sumright"><span class="ln">' + gbp(p.sub) + '</span>' +
+          '<button type="button" class="basket__rm" aria-label="Remove ' + p.name + '">×</button></div>';
+        row.querySelector('.basket__rm').addEventListener('click', () => setFresh(p.id, 0));
+        rowsEl.appendChild(row);
+      });
+      emptyEl.style.display = fresh.length ? 'none' : '';
+    }
+
+    function recompute() {
+      const fresh = freshPicked(), tinc = tincPicked();
+      renderSummary(fresh);
+      const grams = fresh.reduce((s, p) => s + p.qty, 0);
+      const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
+      totalEl.textContent = gbp(total);
+      // Ready if the fresh order clears 200g, or there's at least one tincture.
+      const freshOk = grams >= MIN_GRAMS;
+      const ready = freshOk || (grams === 0 && tinc.length > 0);
+      const bits = [];
+      if (grams) bits.push(grams + 'g fresh' + (freshOk ? '' : ' · 200g minimum'));
+      if (tinc.length) bits.push(tinc.reduce((s, p) => s + p.qty, 0) + ' tincture' + (tinc.reduce((s,p)=>s+p.qty,0) === 1 ? '' : 's'));
+      weightEl.textContent = bits.length ? bits.join(' · ') : 'Nothing picked yet';
+      waBtn.disabled = !ready;
+      msgBtn.disabled = !ready;
+    }
+    function orderRef() {
+      const d = new Date();
+      const p2 = n => String(n).padStart(2, '0');
+      return 'CHM-' + p2(d.getDate()) + p2(d.getMonth() + 1) + '-' +
+        Math.random().toString(36).slice(2, 5).toUpperCase();
+    }
+    function orderText() {
+      const fresh = freshPicked(), tinc = tincPicked();
+      const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
+      let body = fresh.map(p => '• ' + p.qty + 'g ' + p.name + ' — ' + gbp(p.sub)).join('\n');
+      if (tinc.length) {
+        if (body) body += '\n';
+        body += tinc.map(p => '• ' + p.qty + ' × ' + p.name + ' — ' + gbp(p.sub)).join('\n');
+      }
+      return 'Chiltern Hills Mushrooms — order ' + orderRef() + '\n' +
+        '(' + orderWindow().label + ')\n\n' +
+        body + '\n\nEstimated total: ' + gbp(total) +
+        '\n(Final weight & price to be confirmed.)';
+    }
+
+    // ----- Order window: cut-off Thursday 8pm, delivered the coming Saturday -----
+    function orderWindow() {
+      const now = new Date();
+      const day = now.getDay();          // 0 Sun … 6 Sat
+      const hr = now.getHours();
+      // Days until this week's Thursday (4); if Thu and >=20:00, we've missed it.
+      let daysToThu = (4 - day + 7) % 7;
+      const missed = (day > 4) || (day === 4 && hr >= 20) || (day === 5) || (day === 6);
+      // Delivery is the Saturday (6) after the active cut-off.
+      let daysToSat = (6 - day + 7) % 7;
+      if (missed) daysToSat += 7;
+      const sat = new Date(now); sat.setDate(now.getDate() + daysToSat);
+      const fmt = sat.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      const open = !missed;
+      return {
+        open,
+        label: 'For delivery ' + fmt,
+        note: open
+          ? 'Ordering for <b>' + fmt + '</b> — cut-off Thursday 8pm'
+          : 'This week’s list has closed — ordering for <b>' + fmt + '</b>'
+      };
+    }
+    const winEl = document.getElementById('basket-window');
+    if (winEl) {
+      const w = orderWindow();
+      winEl.innerHTML = w.note;
+      winEl.classList.toggle('is-closed', !w.open);
+    }
+
+    function handoff() {
+      const field = document.querySelector('#cform [name="message"]');
+      if (field) {
+        const existing = field.value.trim();
+        field.value = orderText() + (existing ? '\n\n' + existing : '');
+      }
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const name = document.querySelector('#cform [name="name"]');
+      if (name) setTimeout(() => name.focus({ preventScroll: true }), 600);
+    }
+    waBtn.addEventListener('click', () => {
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(orderText()), '_blank', 'noopener');
+    });
+    msgBtn.addEventListener('click', handoff);
   }
 </script>
 </body>
