@@ -757,6 +757,26 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   box-shadow: 0 40px 80px -28px rgba(28,43,49,0.22);
 }
 .apothecary__img img { width: 82%; filter: drop-shadow(0 22px 32px rgba(28,43,49,0.22)); }
+.apothecary__media { display: flex; flex-direction: column; gap: 16px; }
+.apothecary__thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.apothecary__thumb {
+  margin: 0;
+  position: relative;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  overflow: hidden;
+  box-shadow: 0 20px 40px -24px rgba(28,43,49,0.3);
+}
+.apothecary__thumb img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+.apothecary__thumb figcaption {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.apothecary__thumb figcaption span:last-child { color: var(--amber); }
 .apothecary__img::before {
   content: ""; position: absolute; inset: 0;
   background: radial-gradient(60% 50% at 50% 50%, rgba(180,138,58,0.08), transparent 70%);
@@ -1273,6 +1293,24 @@ details.faq__item .answer {
 
 
 
+.footer__audio {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 18px;
+  padding: 28px 0;
+  border-top: 1px solid var(--rule);
+}
+.footer__audio-label { display: flex; flex-direction: column; gap: 4px; }
+.footer__audio-label .k {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber);
+}
+.footer__audio-label .v {
+  font-family: var(--ff-display); font-style: italic;
+  font-variation-settings: "opsz" 40, "SOFT" 100;
+  font-size: 18px; color: var(--ink-dim);
+}
+.footer__player { height: 38px; max-width: 100%; }
+@media (max-width: 600px) { .footer__player { width: 100%; } }
 .footer__bot {
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
   padding-top: 24px;
@@ -1571,8 +1609,20 @@ details.faq__item .answer {
     </div>
 
     <div class="apothecary__grid">
-      <div class="apothecary__img reveal">
-        <img src="uploads/everything_bundle_new.png.webp" alt="Bristol Fungarium tinctures and Chiltern Hills complementary products" />
+      <div class="apothecary__media reveal">
+        <div class="apothecary__img">
+          <img src="uploads/everything_bundle_new.png.webp" alt="Bristol Fungarium tinctures and Chiltern Hills complementary products" />
+        </div>
+        <div class="apothecary__thumbs">
+          <figure class="apothecary__thumb">
+            <img src="uploads/cacao-drink-1.jpeg" alt="Lion's Mane cacao drink" loading="lazy" />
+            <figcaption><span>Cacao Drink</span><span>£10.50</span></figcaption>
+          </figure>
+          <figure class="apothecary__thumb">
+            <img src="uploads/chocolate-bar-2.jpeg" alt="Lion's Mane chocolate bar" loading="lazy" />
+            <figcaption><span>Chocolate Bar</span><span>£5.95</span></figcaption>
+          </figure>
+        </div>
       </div>
 
       <div class="apothecary__text reveal" style="--d:.1s">
@@ -1889,6 +1939,17 @@ details.faq__item .answer {
         <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn (link coming soon)">LinkedIn ↗</a>
       </div>
     </div>
+  </div>
+
+  <div class="footer__audio">
+    <div class="footer__audio-label">
+      <span class="k">Sound from the farm</span>
+      <span class="v">A minute in the growing rooms</span>
+    </div>
+    <audio controls preload="none" class="footer__player">
+      <source src="uploads/chiltern-hills-audio.mp3" type="audio/mpeg">
+      Your browser doesn't support audio playback.
+    </audio>
   </div>
 
   <div class="footer__bot">
