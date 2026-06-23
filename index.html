@@ -629,6 +629,66 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 .card__foot .add {
   color: var(--ink-mute);
 }
+/* add-to-basket control inside each harvest card */
+.card__add { display: flex; align-items: center; }
+.card__addbtn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px;
+  border: 1px solid var(--amber);
+  border-radius: 2px;
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--amber); background: transparent;
+  transition: background .2s ease, color .2s ease;
+}
+.card__addbtn:hover { background: var(--amber); color: var(--bg); }
+.card__addbtn span { font-size: 13px; line-height: 1; }
+.card__step { display: none; align-items: center; gap: 8px; }
+.card__step.is-on { display: flex; }
+.card__add.is-on .card__addbtn { display: none; }
+.card__step button {
+  width: 30px; height: 30px;
+  border: 1px solid var(--rule); border-radius: 2px;
+  font-family: var(--ff-mono); font-size: 16px; line-height: 1;
+  color: var(--ink); background: var(--bg);
+  transition: border-color .2s ease, color .2s ease;
+}
+.card__step button:hover { border-color: var(--amber); color: var(--amber); }
+.card__step .q {
+  min-width: 52px; text-align: center;
+  font-family: var(--ff-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--rust);
+}
+
+/* basket summary (receipt) rows + empty state */
+.basket__empty {
+  padding: 26px clamp(28px, 3.4vw, 48px);
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-mute);
+  border-bottom: 1px solid var(--rule);
+}
+.basket__sumrow {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px clamp(28px, 3.4vw, 48px);
+  border-bottom: 1px solid var(--rule);
+}
+.basket__sumrow b {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 40, "SOFT" 40;
+  font-size: 18px; font-weight: 400; color: var(--ink);
+}
+.basket__sumrow .g {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.1em;
+  color: var(--ink-mute); margin-left: 10px;
+}
+.basket__sumright { display: flex; align-items: center; gap: 18px; }
+.basket__sumrow .ln { font-family: var(--ff-mono); font-size: 14px; color: var(--rust); }
+.basket__rm {
+  font-family: var(--ff-mono); font-size: 16px; line-height: 1;
+  color: var(--ink-mute); background: none; padding: 4px;
+  transition: color .2s ease;
+}
+.basket__rm:hover { color: var(--rust); }
 
 @media (max-width: 1000px) {
   .grid-harvest { grid-template-columns: repeat(2, 1fr); }
@@ -1458,7 +1518,7 @@ details.faq__item .answer {
         <span class="card__latin">Hericium erinaceus</span>
       </div>
       <p class="card__note">Mild and sweet with a seafood-like finish — fry in brown butter and you've made crab cakes without the crab.</p>
-      <div class="card__foot"><span>Cognitive · Culinary</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Cognitive · Culinary</span><div class="card__add" data-id="lions"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.1s">
@@ -1472,7 +1532,7 @@ details.faq__item .answer {
         <span class="card__latin">Pleurotus eryngii</span>
       </div>
       <p class="card__note">The vegan scallop. Thick-stemmed, meaty, beautifully pan-seared in rings with garlic, thyme and a squeeze of lemon.</p>
-      <div class="card__foot"><span>Meaty · Show-stopper</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Meaty · Show-stopper</span><div class="card__add" data-id="king"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.2s">
@@ -1486,7 +1546,7 @@ details.faq__item .answer {
         <span class="card__latin">Pleurotus ostreatus</span>
       </div>
       <p class="card__note">Tender, velvety, unfussy. The everyday workhorse — risotto, ragù, soup, pasta, or just hot oil and salt.</p>
-      <div class="card__foot"><span>Everyday · Versatile</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Everyday · Versatile</span><div class="card__add" data-id="grey"></div></div>
     </article>
 
     <article class="card reveal">
@@ -1500,7 +1560,7 @@ details.faq__item .answer {
         <span class="card__latin">Lentinula edodes</span>
       </div>
       <p class="card__note">Deep, meaty umami. Broths, ramens, stir-fries and slow braises — the one mushroom that tastes as good dried as fresh.</p>
-      <div class="card__foot"><span>Umami · Asian Kitchen</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Umami · Asian Kitchen</span><div class="card__add" data-id="shiitake"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.1s">
@@ -1514,7 +1574,7 @@ details.faq__item .answer {
         <span class="card__latin">Pholiota nameko</span>
       </div>
       <p class="card__note">Earthy, nutty, gently peppery. A gorgeous thing with lamb, lentils, or a fat slice of sourdough and ricotta.</p>
-      <div class="card__foot"><span>Earthy · Forest-Floor</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Earthy · Forest-Floor</span><div class="card__add" data-id="chestnut"></div></div>
     </article>
 
     <article class="card reveal" style="--d:.2s">
@@ -1528,7 +1588,7 @@ details.faq__item .answer {
         <span class="card__latin">Pleurotus citrinopileatus</span>
       </div>
       <p class="card__note">Thin-fleshed, bright-yellow, quick-cooking. Hot pan, thirty seconds a side, straight onto a garlic-rubbed bruschetta.</p>
-      <div class="card__foot"><span>Bright · Fast-Fry</span><span class="add">On this week’s list</span></div>
+      <div class="card__foot"><span>Bright · Fast-Fry</span><div class="card__add" data-id="golden"></div></div>
     </article>
 
   </div>
@@ -1695,13 +1755,15 @@ details.faq__item .answer {
   <!-- ====== HARVEST BASKET ====== -->
   <div class="basket reveal" id="basket">
     <div class="basket__head">
-      <div class="no">Build your basket</div>
-      <h3>This week's <em>harvest list.</em></h3>
-      <p>Set your weights — we cut to order the morning of delivery. Nothing's charged here: pick what you'd like, send it across, and we'll confirm by return with the final weight and how to pay.</p>
+      <div class="no">Your order slip</div>
+      <h3>The <em>harvest basket.</em></h3>
+      <p>Add varieties from the harvest above — adjust the weight, then send your list across. Nothing's charged here: we cut to order and confirm the final weight and how to pay by return.</p>
       <p class="basket__window" id="basket-window"></p>
     </div>
 
-    <div class="basket__rows" id="basket-rows" role="list"></div>
+    <div class="basket__rows" id="basket-rows" role="list">
+      <div class="basket__empty" id="basket-empty">Your basket is empty — add a variety from the harvest above ↑</div>
+    </div>
 
     <div class="basket__subhead">
       <span class="basket__subhead-k">The Apothecary</span>
@@ -1988,7 +2050,7 @@ details.faq__item .answer {
     { id: 'king',     name: 'King Oyster',  latin: 'Pleurotus eryngii',        price: 28 },
     { id: 'grey',     name: 'Grey Oyster',  latin: 'Pleurotus ostreatus',      price: 24 },
     { id: 'shiitake', name: 'Shiitake',     latin: 'Lentinula edodes',         price: 24 },
-    { id: 'chestnut', name: 'Chestnut',     latin: 'Pholiota adiposa',         price: 22 },
+    { id: 'chestnut', name: 'Speckled Chestnut', latin: 'Pholiota nameko',     price: 22 },
     { id: 'golden',   name: 'Golden Oyster',latin: 'Pleurotus citrinopileatus',price: 22 },
   ];
   const TINCTURES = [
@@ -2005,27 +2067,58 @@ details.faq__item .answer {
   const rowsEl = document.getElementById('basket-rows');
   if (rowsEl) {
     const tinctureEl = document.getElementById('basket-tinctures');
+    const emptyEl  = document.getElementById('basket-empty');
     const totalEl  = document.getElementById('basket-total');
     const weightEl = document.getElementById('basket-weight');
     const waBtn    = document.getElementById('basket-wa');
     const msgBtn   = document.getElementById('basket-msg');
     const gbp = n => '£' + n.toFixed(2);
     const state = Object.fromEntries([...HARVEST, ...TINCTURES].map(p => [p.id, 0]));
+    const syncers = {};   // id -> fn that re-renders that product's own control
 
-    // unit: 'g' (fresh, step 100) or 'unit' (tincture, step 1)
-    function buildRow(p, unit, container) {
-      const step = unit === 'g' ? STEP : 1;
-      const fmtQty = v => unit === 'g' ? v + '&nbsp;g' : '× ' + v;
-      const fmtSub = v => unit === 'g' ? v / 1000 * p.price : v * p.price;
-      const meta = unit === 'g' ? gbp(p.price) + '/kg' : gbp(p.price) + ' each';
+    const FIRST = 200;    // first tap adds the 200g minimum tub
+    function setFresh(id, grams) { state[id] = Math.max(0, grams); syncers[id](); }
+
+    // Fresh: each harvest card carries its own add control
+    document.querySelectorAll('.card__add').forEach(el => {
+      const p = HARVEST.find(x => x.id === el.dataset.id);
+      if (!p) return;
+      el.innerHTML =
+        '<button type="button" class="card__addbtn">Add <span>+</span></button>' +
+        '<div class="card__step">' +
+          '<button type="button" aria-label="Less ' + p.name + '">−</button>' +
+          '<span class="q">0&nbsp;g</span>' +
+          '<button type="button" aria-label="More ' + p.name + '">+</button>' +
+        '</div>';
+      const addBtn = el.querySelector('.card__addbtn');
+      const step = el.querySelector('.card__step');
+      const [dec, inc] = step.querySelectorAll('button');
+      const q = step.querySelector('.q');
+      const sync = () => {
+        const g = state[p.id];
+        q.innerHTML = g + '&nbsp;g';
+        const on = g > 0;
+        el.classList.toggle('is-on', on);
+        step.classList.toggle('is-on', on);
+        recompute();
+      };
+      syncers[p.id] = sync;
+      addBtn.addEventListener('click', () => setFresh(p.id, FIRST));
+      inc.addEventListener('click', () => setFresh(p.id, state[p.id] + STEP));
+      dec.addEventListener('click', () => setFresh(p.id, state[p.id] - STEP));
+      sync();
+    });
+
+    // Tinctures: unit steppers live in the basket's apothecary sub-section
+    TINCTURES.forEach(p => {
       const row = document.createElement('div');
       row.className = 'basket__row';
       row.setAttribute('role', 'listitem');
       row.innerHTML =
-        '<div class="basket__name"><b>' + p.name + '</b><span>' + p.latin + ' · ' + meta + '</span></div>' +
+        '<div class="basket__name"><b>' + p.name + '</b><span>' + p.latin + ' · ' + gbp(p.price) + ' each</span></div>' +
         '<div class="basket__stepper">' +
           '<button type="button" aria-label="Less ' + p.name + '" disabled>−</button>' +
-          '<span class="basket__qty">' + fmtQty(0) + '</span>' +
+          '<span class="basket__qty">× 0</span>' +
           '<button type="button" aria-label="More ' + p.name + '">+</button>' +
         '</div>' +
         '<span class="basket__line">—</span>';
@@ -2034,27 +2127,42 @@ details.faq__item .answer {
       const lineEl = row.querySelector('.basket__line');
       const sync = () => {
         const v = state[p.id];
-        qtyEl.innerHTML = fmtQty(v);
-        lineEl.textContent = v ? gbp(fmtSub(v)) : '—';
+        qtyEl.textContent = '× ' + v;
+        lineEl.textContent = v ? gbp(v * p.price) : '—';
         lineEl.classList.toggle('is-active', v > 0);
         row.classList.toggle('is-active', v > 0);
         dec.disabled = v === 0;
         recompute();
       };
-      dec.addEventListener('click', () => { state[p.id] = Math.max(0, state[p.id] - step); sync(); });
-      inc.addEventListener('click', () => { state[p.id] += step; sync(); });
-      container.appendChild(row);
-    }
-    HARVEST.forEach(p => buildRow(p, 'g', rowsEl));
-    TINCTURES.forEach(p => buildRow(p, 'unit', tinctureEl));
+      syncers[p.id] = sync;
+      inc.addEventListener('click', () => { state[p.id] += 1; sync(); });
+      dec.addEventListener('click', () => { state[p.id] = Math.max(0, state[p.id] - 1); sync(); });
+      tinctureEl.appendChild(row);
+    });
 
-    const freshPicked = () => HARVEST.filter(p => state[p.id] > 0)
-      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] / 1000 * p.price }));
-    const tincPicked = () => TINCTURES.filter(p => state[p.id] > 0)
-      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] * p.price }));
+    function freshPicked() { return HARVEST.filter(p => state[p.id] > 0)
+      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] / 1000 * p.price })); }
+    function tincPicked() { return TINCTURES.filter(p => state[p.id] > 0)
+      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] * p.price })); }
+
+    function renderSummary(fresh) {
+      rowsEl.querySelectorAll('.basket__sumrow').forEach(n => n.remove());
+      fresh.forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'basket__sumrow';
+        row.innerHTML =
+          '<div><b>' + p.name + '</b><span class="g">' + p.qty + ' g</span></div>' +
+          '<div class="basket__sumright"><span class="ln">' + gbp(p.sub) + '</span>' +
+          '<button type="button" class="basket__rm" aria-label="Remove ' + p.name + '">×</button></div>';
+        row.querySelector('.basket__rm').addEventListener('click', () => setFresh(p.id, 0));
+        rowsEl.appendChild(row);
+      });
+      emptyEl.style.display = fresh.length ? 'none' : '';
+    }
 
     function recompute() {
       const fresh = freshPicked(), tinc = tincPicked();
+      renderSummary(fresh);
       const grams = fresh.reduce((s, p) => s + p.qty, 0);
       const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
       totalEl.textContent = gbp(total);
