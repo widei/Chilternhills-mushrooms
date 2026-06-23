@@ -888,6 +888,36 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .basket__head h3 em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
 .basket__head p { color: var(--ink-dim); font-size: 16px; max-width: 64ch; }
+.basket__window {
+  margin-top: 20px !important;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid var(--rule); border-radius: 2px;
+  background: var(--bg);
+  font-family: var(--ff-mono) !important;
+  font-size: 11px !important; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-dim) !important;
+}
+.basket__window b { color: var(--amber); font-weight: 500; }
+.basket__window::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--moss); box-shadow: 0 0 0 3px rgba(108,126,79,0.2);
+}
+.basket__window.is-closed::before { background: var(--rust); box-shadow: 0 0 0 3px rgba(139,58,42,0.2); }
+
+.basket__subhead {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  padding: 22px clamp(28px, 3.4vw, 48px) 6px;
+}
+.basket__subhead-k {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber);
+}
+.basket__subhead-v {
+  font-family: var(--ff-display); font-style: italic;
+  font-variation-settings: "opsz" 40, "SOFT" 100;
+  font-size: 16px; color: var(--ink-mute);
+}
 
 .basket__row {
   display: grid;
@@ -1668,9 +1698,16 @@ details.faq__item .answer {
       <div class="no">Build your basket</div>
       <h3>This week's <em>harvest list.</em></h3>
       <p>Set your weights — we cut to order the morning of delivery. Nothing's charged here: pick what you'd like, send it across, and we'll confirm by return with the final weight and how to pay.</p>
+      <p class="basket__window" id="basket-window"></p>
     </div>
 
     <div class="basket__rows" id="basket-rows" role="list"></div>
+
+    <div class="basket__subhead">
+      <span class="basket__subhead-k">The Apothecary</span>
+      <span class="basket__subhead-v">Dual-extracted tinctures · Bristol Fungarium</span>
+    </div>
+    <div class="basket__rows" id="basket-tinctures" role="list"></div>
 
     <div class="basket__foot">
       <div class="basket__total">
@@ -1945,7 +1982,7 @@ details.faq__item .answer {
   }
 
   // ====== HARVEST BASKET ======
-  // Prices mirror the ticker (£/kg). Sold by weight, cut to order.
+  // Fresh mushrooms sold by weight (£/kg, ticker prices); tinctures sold by the bottle.
   const HARVEST = [
     { id: 'lions',    name: "Lion's Mane",  latin: 'Hericium erinaceus',       price: 30 },
     { id: 'king',     name: 'King Oyster',  latin: 'Pleurotus eryngii',        price: 28 },
@@ -1954,62 +1991,80 @@ details.faq__item .answer {
     { id: 'chestnut', name: 'Chestnut',     latin: 'Pholiota adiposa',         price: 22 },
     { id: 'golden',   name: 'Golden Oyster',latin: 'Pleurotus citrinopileatus',price: 22 },
   ];
-  const STEP = 100;        // grams per click
-  const MIN_TOTAL = 200;   // grams minimum order
+  const TINCTURES = [
+    { id: 't-lions',     name: "Lion's Mane Tincture", latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-reishi',    name: 'Reishi Tincture',      latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-cordyceps', name: 'Cordyceps Tincture',   latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-turkey',    name: 'Turkey Tail Tincture', latin: 'Bristol Fungarium · 30ml', price: 30 },
+    { id: 't-chaga',     name: 'Chaga Tincture',       latin: 'Bristol Fungarium · 30ml', price: 30 },
+  ];
+  const STEP = 100;        // grams per click (fresh)
+  const MIN_GRAMS = 200;   // minimum fresh order
   const PHONE = '447949026535';
 
   const rowsEl = document.getElementById('basket-rows');
   if (rowsEl) {
-    const state = Object.fromEntries(HARVEST.map(p => [p.id, 0]));
+    const tinctureEl = document.getElementById('basket-tinctures');
     const totalEl  = document.getElementById('basket-total');
     const weightEl = document.getElementById('basket-weight');
     const waBtn    = document.getElementById('basket-wa');
     const msgBtn   = document.getElementById('basket-msg');
     const gbp = n => '£' + n.toFixed(2);
+    const state = Object.fromEntries([...HARVEST, ...TINCTURES].map(p => [p.id, 0]));
 
-    HARVEST.forEach(p => {
+    // unit: 'g' (fresh, step 100) or 'unit' (tincture, step 1)
+    function buildRow(p, unit, container) {
+      const step = unit === 'g' ? STEP : 1;
+      const fmtQty = v => unit === 'g' ? v + '&nbsp;g' : '× ' + v;
+      const fmtSub = v => unit === 'g' ? v / 1000 * p.price : v * p.price;
+      const meta = unit === 'g' ? gbp(p.price) + '/kg' : gbp(p.price) + ' each';
       const row = document.createElement('div');
       row.className = 'basket__row';
       row.setAttribute('role', 'listitem');
       row.innerHTML =
-        '<div class="basket__name"><b>' + p.name + '</b><span>' + p.latin + ' · ' + gbp(p.price) + '/kg</span></div>' +
+        '<div class="basket__name"><b>' + p.name + '</b><span>' + p.latin + ' · ' + meta + '</span></div>' +
         '<div class="basket__stepper">' +
-          '<button type="button" data-act="dec" aria-label="Less ' + p.name + '" disabled>−</button>' +
-          '<span class="basket__qty" id="qty-' + p.id + '">0&nbsp;g</span>' +
-          '<button type="button" data-act="inc" aria-label="More ' + p.name + '">+</button>' +
+          '<button type="button" aria-label="Less ' + p.name + '" disabled>−</button>' +
+          '<span class="basket__qty">' + fmtQty(0) + '</span>' +
+          '<button type="button" aria-label="More ' + p.name + '">+</button>' +
         '</div>' +
-        '<span class="basket__line" id="line-' + p.id + '">—</span>';
+        '<span class="basket__line">—</span>';
       const [dec, inc] = row.querySelectorAll('button');
-      const qtyEl = row.querySelector('#qty-' + p.id);
-      const lineEl = row.querySelector('#line-' + p.id);
+      const qtyEl = row.querySelector('.basket__qty');
+      const lineEl = row.querySelector('.basket__line');
       const sync = () => {
-        const g = state[p.id];
-        qtyEl.innerHTML = g + '&nbsp;g';
-        lineEl.textContent = g ? gbp(g / 1000 * p.price) : '—';
-        lineEl.classList.toggle('is-active', g > 0);
-        row.classList.toggle('is-active', g > 0);
-        dec.disabled = g === 0;
+        const v = state[p.id];
+        qtyEl.innerHTML = fmtQty(v);
+        lineEl.textContent = v ? gbp(fmtSub(v)) : '—';
+        lineEl.classList.toggle('is-active', v > 0);
+        row.classList.toggle('is-active', v > 0);
+        dec.disabled = v === 0;
         recompute();
       };
-      dec.addEventListener('click', () => { state[p.id] = Math.max(0, state[p.id] - STEP); sync(); });
-      inc.addEventListener('click', () => { state[p.id] += STEP; sync(); });
-      rowsEl.appendChild(row);
-    });
-
-    function lines() {
-      return HARVEST.filter(p => state[p.id] > 0)
-        .map(p => ({ ...p, g: state[p.id], sub: state[p.id] / 1000 * p.price }));
+      dec.addEventListener('click', () => { state[p.id] = Math.max(0, state[p.id] - step); sync(); });
+      inc.addEventListener('click', () => { state[p.id] += step; sync(); });
+      container.appendChild(row);
     }
+    HARVEST.forEach(p => buildRow(p, 'g', rowsEl));
+    TINCTURES.forEach(p => buildRow(p, 'unit', tinctureEl));
+
+    const freshPicked = () => HARVEST.filter(p => state[p.id] > 0)
+      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] / 1000 * p.price }));
+    const tincPicked = () => TINCTURES.filter(p => state[p.id] > 0)
+      .map(p => ({ ...p, qty: state[p.id], sub: state[p.id] * p.price }));
+
     function recompute() {
-      const picked = lines();
-      const grams = picked.reduce((s, p) => s + p.g, 0);
-      const total = picked.reduce((s, p) => s + p.sub, 0);
+      const fresh = freshPicked(), tinc = tincPicked();
+      const grams = fresh.reduce((s, p) => s + p.qty, 0);
+      const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
       totalEl.textContent = gbp(total);
-      const ready = grams >= MIN_TOTAL;
-      weightEl.textContent = grams === 0
-        ? 'Nothing picked yet'
-        : grams + 'g across ' + picked.length + (picked.length === 1 ? ' variety' : ' varieties') +
-          (ready ? '' : ' · 200g minimum');
+      // Ready if the fresh order clears 200g, or there's at least one tincture.
+      const freshOk = grams >= MIN_GRAMS;
+      const ready = freshOk || (grams === 0 && tinc.length > 0);
+      const bits = [];
+      if (grams) bits.push(grams + 'g fresh' + (freshOk ? '' : ' · 200g minimum'));
+      if (tinc.length) bits.push(tinc.reduce((s, p) => s + p.qty, 0) + ' tincture' + (tinc.reduce((s,p)=>s+p.qty,0) === 1 ? '' : 's'));
+      weightEl.textContent = bits.length ? bits.join(' · ') : 'Nothing picked yet';
       waBtn.disabled = !ready;
       msgBtn.disabled = !ready;
     }
@@ -2020,18 +2075,49 @@ details.faq__item .answer {
         Math.random().toString(36).slice(2, 5).toUpperCase();
     }
     function orderText() {
-      const picked = lines();
-      const total = picked.reduce((s, p) => s + p.sub, 0);
-      const body = picked.map(p => '• ' + p.g + 'g ' + p.name + ' — ' + gbp(p.sub)).join('\n');
-      return 'Chiltern Hills Mushrooms — order ' + orderRef() + '\n\n' +
+      const fresh = freshPicked(), tinc = tincPicked();
+      const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
+      let body = fresh.map(p => '• ' + p.qty + 'g ' + p.name + ' — ' + gbp(p.sub)).join('\n');
+      if (tinc.length) {
+        if (body) body += '\n';
+        body += tinc.map(p => '• ' + p.qty + ' × ' + p.name + ' — ' + gbp(p.sub)).join('\n');
+      }
+      return 'Chiltern Hills Mushrooms — order ' + orderRef() + '\n' +
+        '(' + orderWindow().label + ')\n\n' +
         body + '\n\nEstimated total: ' + gbp(total) +
         '\n(Final weight & price to be confirmed.)';
     }
 
-    waBtn.addEventListener('click', () => {
-      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(orderText()), '_blank', 'noopener');
-    });
-    msgBtn.addEventListener('click', () => {
+    // ----- Order window: cut-off Thursday 8pm, delivered the coming Saturday -----
+    function orderWindow() {
+      const now = new Date();
+      const day = now.getDay();          // 0 Sun … 6 Sat
+      const hr = now.getHours();
+      // Days until this week's Thursday (4); if Thu and >=20:00, we've missed it.
+      let daysToThu = (4 - day + 7) % 7;
+      const missed = (day > 4) || (day === 4 && hr >= 20) || (day === 5) || (day === 6);
+      // Delivery is the Saturday (6) after the active cut-off.
+      let daysToSat = (6 - day + 7) % 7;
+      if (missed) daysToSat += 7;
+      const sat = new Date(now); sat.setDate(now.getDate() + daysToSat);
+      const fmt = sat.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      const open = !missed;
+      return {
+        open,
+        label: 'For delivery ' + fmt,
+        note: open
+          ? 'Ordering for <b>' + fmt + '</b> — cut-off Thursday 8pm'
+          : 'This week’s list has closed — ordering for <b>' + fmt + '</b>'
+      };
+    }
+    const winEl = document.getElementById('basket-window');
+    if (winEl) {
+      const w = orderWindow();
+      winEl.innerHTML = w.note;
+      winEl.classList.toggle('is-closed', !w.open);
+    }
+
+    function handoff() {
       const field = document.querySelector('#cform [name="message"]');
       if (field) {
         const existing = field.value.trim();
@@ -2040,7 +2126,11 @@ details.faq__item .answer {
       document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
       const name = document.querySelector('#cform [name="name"]');
       if (name) setTimeout(() => name.focus({ preventScroll: true }), 600);
+    }
+    waBtn.addEventListener('click', () => {
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(orderText()), '_blank', 'noopener');
     });
+    msgBtn.addEventListener('click', handoff);
   }
 </script>
 </body>
