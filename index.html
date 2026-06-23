@@ -866,6 +866,99 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   color: var(--ink);
 }
 
+/* ====== HARVEST BASKET ====== */
+.basket {
+  margin-top: 56px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+.basket__head { padding: clamp(28px, 3.4vw, 48px); border-bottom: 1px solid var(--rule); }
+.basket__head .no {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 16px;
+}
+.basket__head h3 {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60; font-weight: 300;
+  font-size: clamp(30px, 3.6vw, 48px); line-height: 0.98; letter-spacing: -0.028em;
+  margin-bottom: 16px;
+}
+.basket__head h3 em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.basket__head p { color: var(--ink-dim); font-size: 16px; max-width: 64ch; }
+
+.basket__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 20px clamp(28px, 3.4vw, 48px);
+  border-bottom: 1px solid var(--rule);
+  transition: background .25s ease;
+}
+.basket__row.is-active { background: var(--bg); }
+.basket__name { display: flex; flex-direction: column; gap: 3px; }
+.basket__name b {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 40, "SOFT" 40;
+  font-size: 20px; font-weight: 400; color: var(--ink);
+}
+.basket__name span {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute);
+}
+.basket__stepper { display: flex; align-items: center; gap: 4px; }
+.basket__stepper button {
+  width: 36px; height: 36px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: var(--ff-mono); font-size: 18px; line-height: 1;
+  color: var(--ink); background: var(--bg);
+  transition: border-color .2s ease, color .2s ease;
+}
+.basket__stepper button:hover { border-color: var(--amber); color: var(--amber); }
+.basket__stepper button:disabled { opacity: .35; pointer-events: none; }
+.basket__qty {
+  min-width: 74px; text-align: center;
+  font-family: var(--ff-mono); font-size: 14px; letter-spacing: 0.04em; color: var(--ink);
+}
+.basket__line {
+  min-width: 78px; text-align: right;
+  font-family: var(--ff-mono); font-size: 14px; color: var(--ink-dim);
+}
+.basket__line.is-active { color: var(--rust); }
+
+.basket__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+  padding: clamp(24px, 3vw, 36px) clamp(28px, 3.4vw, 48px);
+}
+.basket__total { display: flex; flex-direction: column; gap: 4px; }
+.basket__total-k {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute);
+}
+.basket__total-v {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 40; font-weight: 400;
+  font-size: clamp(38px, 5vw, 56px); line-height: 0.9; color: var(--ink);
+}
+.basket__total-sub { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-mute); }
+.basket__actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.basket__actions .btn:disabled { opacity: .4; pointer-events: none; }
+.basket__legal {
+  padding: 0 clamp(28px, 3.4vw, 48px) clamp(24px, 3vw, 32px);
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.06em; color: var(--ink-mute);
+}
+@media (max-width: 640px) {
+  .basket__row { grid-template-columns: 1fr auto; row-gap: 14px; }
+  .basket__line { grid-column: 2; }
+  .basket__foot { flex-direction: column; align-items: stretch; }
+  .basket__actions .btn { flex: 1; justify-content: center; }
+}
+
 /* ====== CONTACT — map + order slip, one block ====== */
 .contact {
   margin-top: 64px;
@@ -1563,10 +1656,39 @@ details.faq__item .answer {
 
   <div class="order__cta-block reveal">
     <p>Free delivery within 10&nbsp;miles of HP14 &mdash; always.</p>
-    <a href="#contact" class="btn btn--primary">
+    <a href="#basket" class="btn btn--primary">
       Start your order
       <span class="arrow">→</span>
     </a>
+  </div>
+
+  <!-- ====== HARVEST BASKET ====== -->
+  <div class="basket reveal" id="basket">
+    <div class="basket__head">
+      <div class="no">Build your basket</div>
+      <h3>This week's <em>harvest list.</em></h3>
+      <p>Set your weights — we cut to order the morning of delivery. Nothing's charged here: pick what you'd like, send it across, and we'll confirm by return with the final weight and how to pay.</p>
+    </div>
+
+    <div class="basket__rows" id="basket-rows" role="list"></div>
+
+    <div class="basket__foot">
+      <div class="basket__total">
+        <span class="basket__total-k">Estimated total</span>
+        <strong class="basket__total-v" id="basket-total">£0.00</strong>
+        <span class="basket__total-sub" id="basket-weight">Nothing picked yet</span>
+      </div>
+      <div class="basket__actions">
+        <button type="button" class="btn btn--primary" id="basket-wa" disabled>
+          Order on WhatsApp
+          <span class="arrow">→</span>
+        </button>
+        <button type="button" class="btn btn--ghost" id="basket-msg" disabled>
+          Add to message below ↓
+        </button>
+      </div>
+    </div>
+    <p class="basket__legal">Minimum order 200g. Prices are per kilo, cut fresh — final figure confirmed before you pay.</p>
   </div>
 
   <div class="contact reveal" id="contact">
@@ -1819,6 +1941,105 @@ details.faq__item .answer {
     stage.addEventListener('mouseleave', () => {
       main.style.transform = '';
       sub.style.transform = '';
+    });
+  }
+
+  // ====== HARVEST BASKET ======
+  // Prices mirror the ticker (£/kg). Sold by weight, cut to order.
+  const HARVEST = [
+    { id: 'lions',    name: "Lion's Mane",  latin: 'Hericium erinaceus',       price: 30 },
+    { id: 'king',     name: 'King Oyster',  latin: 'Pleurotus eryngii',        price: 28 },
+    { id: 'grey',     name: 'Grey Oyster',  latin: 'Pleurotus ostreatus',      price: 24 },
+    { id: 'shiitake', name: 'Shiitake',     latin: 'Lentinula edodes',         price: 24 },
+    { id: 'chestnut', name: 'Chestnut',     latin: 'Pholiota adiposa',         price: 22 },
+    { id: 'golden',   name: 'Golden Oyster',latin: 'Pleurotus citrinopileatus',price: 22 },
+  ];
+  const STEP = 100;        // grams per click
+  const MIN_TOTAL = 200;   // grams minimum order
+  const PHONE = '447949026535';
+
+  const rowsEl = document.getElementById('basket-rows');
+  if (rowsEl) {
+    const state = Object.fromEntries(HARVEST.map(p => [p.id, 0]));
+    const totalEl  = document.getElementById('basket-total');
+    const weightEl = document.getElementById('basket-weight');
+    const waBtn    = document.getElementById('basket-wa');
+    const msgBtn   = document.getElementById('basket-msg');
+    const gbp = n => '£' + n.toFixed(2);
+
+    HARVEST.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'basket__row';
+      row.setAttribute('role', 'listitem');
+      row.innerHTML =
+        '<div class="basket__name"><b>' + p.name + '</b><span>' + p.latin + ' · ' + gbp(p.price) + '/kg</span></div>' +
+        '<div class="basket__stepper">' +
+          '<button type="button" data-act="dec" aria-label="Less ' + p.name + '" disabled>−</button>' +
+          '<span class="basket__qty" id="qty-' + p.id + '">0&nbsp;g</span>' +
+          '<button type="button" data-act="inc" aria-label="More ' + p.name + '">+</button>' +
+        '</div>' +
+        '<span class="basket__line" id="line-' + p.id + '">—</span>';
+      const [dec, inc] = row.querySelectorAll('button');
+      const qtyEl = row.querySelector('#qty-' + p.id);
+      const lineEl = row.querySelector('#line-' + p.id);
+      const sync = () => {
+        const g = state[p.id];
+        qtyEl.innerHTML = g + '&nbsp;g';
+        lineEl.textContent = g ? gbp(g / 1000 * p.price) : '—';
+        lineEl.classList.toggle('is-active', g > 0);
+        row.classList.toggle('is-active', g > 0);
+        dec.disabled = g === 0;
+        recompute();
+      };
+      dec.addEventListener('click', () => { state[p.id] = Math.max(0, state[p.id] - STEP); sync(); });
+      inc.addEventListener('click', () => { state[p.id] += STEP; sync(); });
+      rowsEl.appendChild(row);
+    });
+
+    function lines() {
+      return HARVEST.filter(p => state[p.id] > 0)
+        .map(p => ({ ...p, g: state[p.id], sub: state[p.id] / 1000 * p.price }));
+    }
+    function recompute() {
+      const picked = lines();
+      const grams = picked.reduce((s, p) => s + p.g, 0);
+      const total = picked.reduce((s, p) => s + p.sub, 0);
+      totalEl.textContent = gbp(total);
+      const ready = grams >= MIN_TOTAL;
+      weightEl.textContent = grams === 0
+        ? 'Nothing picked yet'
+        : grams + 'g across ' + picked.length + (picked.length === 1 ? ' variety' : ' varieties') +
+          (ready ? '' : ' · 200g minimum');
+      waBtn.disabled = !ready;
+      msgBtn.disabled = !ready;
+    }
+    function orderRef() {
+      const d = new Date();
+      const p2 = n => String(n).padStart(2, '0');
+      return 'CHM-' + p2(d.getDate()) + p2(d.getMonth() + 1) + '-' +
+        Math.random().toString(36).slice(2, 5).toUpperCase();
+    }
+    function orderText() {
+      const picked = lines();
+      const total = picked.reduce((s, p) => s + p.sub, 0);
+      const body = picked.map(p => '• ' + p.g + 'g ' + p.name + ' — ' + gbp(p.sub)).join('\n');
+      return 'Chiltern Hills Mushrooms — order ' + orderRef() + '\n\n' +
+        body + '\n\nEstimated total: ' + gbp(total) +
+        '\n(Final weight & price to be confirmed.)';
+    }
+
+    waBtn.addEventListener('click', () => {
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(orderText()), '_blank', 'noopener');
+    });
+    msgBtn.addEventListener('click', () => {
+      const field = document.querySelector('#cform [name="message"]');
+      if (field) {
+        const existing = field.value.trim();
+        field.value = orderText() + (existing ? '\n\n' + existing : '');
+      }
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const name = document.querySelector('#cform [name="name"]');
+      if (name) setTimeout(() => name.focus({ preventScroll: true }), 600);
     });
   }
 </script>
