@@ -72,6 +72,7 @@ body {
 img { display: block; max-width: 100%; height: auto; image-orientation: from-image; }
 
 a { color: inherit; text-decoration: none; }
+a.is-copied { color: var(--moss-deep) !important; }
 
 button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 
@@ -2178,6 +2179,47 @@ details.faq__item .answer {
     });
     msgBtn.addEventListener('click', handoff);
   }
+
+  // ====== EMAIL LINKS: copy to clipboard + feedback ======
+  // mailto still fires for anyone with a mail client; the copy makes the click
+  // useful on machines with no email app registered.
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(() => true).catch(() => legacyCopy(text));
+    }
+    return Promise.resolve(legacyCopy(text));
+  }
+  function legacyCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function flashCopied(a) {
+    if (a.dataset.busy) return;
+    a.dataset.busy = '1';
+    const orig = a.innerHTML;
+    a.innerHTML = 'Copied&nbsp;✓';
+    a.classList.add('is-copied');
+    setTimeout(() => {
+      a.innerHTML = orig;
+      a.classList.remove('is-copied');
+      delete a.dataset.busy;
+    }, 1600);
+  }
+  document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+    a.addEventListener('click', () => {
+      const email = a.getAttribute('href').replace(/^mailto:/, '').split('?')[0];
+      copyText(email).then(ok => { if (ok) flashCopied(a); });
+    });
+  });
 </script>
 </body>
 </html>
