@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chiltern Hills Mushrooms — From Final Cut to First Flush</title>
+<meta name="description" content="Small-batch gourmet mushrooms grown in the Chiltern Hills by a former award-winning film editor. Cut at dawn, delivered the same day. HP14 4BS." />
+
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<link rel="apple-touch-icon" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=JetBrains+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CHILTERN HILLS MUSHROOMS — "Reel"
+   A film-editor's mushroom farm. Moody-forest editorial luxury.
+   ============================================================ */
+
+:root {
+  /* v3 — refined, logo-adjacent palette.
+     Muted, elegant versions of the logo's sky/sun/moss on oat paper.
+     No primary pigment — sophisticated heritage brand. */
+  --bg:        #f1ebd9;   /* warm oat */
+  --bg-soft:   #e7dfc7;   /* toasted */
+  --bg-lift:   #dcd2b5;
+  --ink:       #1c2b31;   /* deep bottle ink */
+  --ink-dim:   #4e5c61;
+  --ink-mute:  #6b6552;   /* darkened for AA contrast on oat */
+  --rule:      #cec3a6;
+  --amber:     #2f5a65;   /* NOTE: 'amber' is the dusty petrol teal — logo-blue's refined cousin */
+  --amber-hot: #3c6d79;
+  --rust:      #8b3a2a;   /* deep heritage terracotta */
+  --rust-hot:  #a2452f;   /* controlled lift — stays within heritage, no neon */
+  --moss:      #6c7e4f;   /* sage-olive */
+  --moss-deep: #53633b;
+  --ochre:     #a47a2b;
+  --cream:     #f1ebd9;
+  --sky:       #3c6d79;
+  --sky-deep:  #1f4852;
+  --sun:       #b68a3a;   /* warm mustard, not bright yellow */
+  --sun-hot:   #9a7524;
+
+  --ff-display: "Fraunces", "Times New Roman", serif;
+  --ff-body:    "Manrope", system-ui, sans-serif;
+  --ff-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --maxw: 1440px;
+  --pad:  clamp(20px, 4vw, 64px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+/* anchor targets clear the fixed nav */
+.section, .apothecary, .forage, [id] { scroll-margin-top: 96px; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ff-body);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 400;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+a { color: inherit; text-decoration: none; }
+
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+
+::selection { background: var(--amber); color: var(--bg); }
+
+/* ====== FILM GRAIN OVERLAY ====== */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.11  0 0 0 0 0.17  0 0 0 0 0.19  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: grain-shift 0.8s steps(6) infinite;
+}
+@keyframes grain-shift {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(-8px,4px); }
+  40%  { transform: translate(6px,-6px); }
+  60%  { transform: translate(-4px,8px); }
+  80%  { transform: translate(8px,6px); }
+  100% { transform: translate(0,0); }
+}
+
+/* ====== VIGNETTE AMBIENT GLOW ====== */
+.ambient {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(55% 40% at 85% 8%, rgba(180,138,58,0.12), transparent 60%),
+    radial-gradient(55% 45% at 8% 92%, rgba(47,90,101,0.09), transparent 60%);
+}
+
+/* ====== NAV ====== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 18px var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  mix-blend-mode: normal;
+  transition: background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(250,243,226,0.85);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border-bottom-color: var(--rule);
+}
+.nav__brand {
+  display: flex; align-items: center; gap: 14px;
+  transition: opacity .25s ease;
+}
+.nav__brand:hover { opacity: 0.8; }
+.nav__brand img {
+  width: 48px; height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(28,43,49,0.18));
+  transition: opacity .4s ease;
+}
+.nav__brand:hover img { opacity: 0.9; }
+.nav__brand-text {
+  display: flex; flex-direction: column; gap: 2px;
+  line-height: 1;
+}
+.nav__brand-text .name {
+  font-family: var(--ff-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  color: var(--ink);
+}
+.nav__brand-text .name em {
+  font-style: italic; color: var(--amber);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.nav__brand-text .tag {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+@media (max-width: 520px) {
+  .nav__brand img { width: 40px; height: 40px; }
+  .nav__brand-text .tag { display: none; }
+}
+.nav__links {
+  display: flex; gap: 28px; align-items: center;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.nav__links a { position: relative; transition: color .25s ease; }
+.nav__links a:hover { color: var(--ink); }
+.nav__links a::after {
+  content: ""; position: absolute; left: 0; bottom: -6px; height: 1px; width: 0;
+  background: var(--amber); transition: width .35s ease;
+}
+.nav__links a:hover::after { width: 100%; }
+.nav__cta {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--amber);
+  padding: 12px 18px;
+  border-radius: 2px;
+  transition: background .3s ease;
+}
+.nav__cta:hover { background: var(--amber-hot); }
+@media (max-width: 800px) {
+  .nav__links { display: none; }
+}
+
+/* ====== HERO ====== */
+.hero {
+  position: relative;
+  padding: 140px var(--pad) 80px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: end;
+  overflow: hidden;
+}
+.hero__meta {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--amber);
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 32px;
+}
+.hero__meta .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 12px var(--amber);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+.hero__title {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  font-weight: 300;
+  font-size: clamp(56px, 10.5vw, 168px);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin-bottom: 36px;
+}
+.hero__title em {
+  display: block;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-weight: 300;
+  color: var(--amber);
+  padding-left: 0.15em;
+}
+.hero__lede {
+  max-width: 520px;
+  font-size: clamp(16px, 1.1vw, 18px);
+  line-height: 1.55;
+  color: var(--ink-dim);
+  margin-bottom: 44px;
+}
+.hero__actions {
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+}
+.btn {
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 18px 28px;
+  border-radius: 2px;
+  transition: transform .25s ease, background .25s ease, color .25s ease;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.btn--primary {
+  background: var(--rust);
+  color: var(--cream);
+}
+.btn--primary:hover { background: var(--rust-hot); transform: translateY(-2px); }
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+.btn--ghost:hover { border-color: var(--amber); color: var(--amber); }
+.btn .arrow {
+  display: inline-block; transition: transform .3s ease;
+}
+.btn:hover .arrow { transform: translateX(5px); }
+
+/* hero image composition */
+.hero__stage {
+  position: relative;
+  align-self: stretch;
+  min-height: 540px;
+}
+.hero__frame {
+  position: absolute;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  background: var(--bg-soft);
+}
+.hero__frame img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.95) contrast(1.02);
+  transition: transform 6s ease;
+}
+.hero__frame:hover img { transform: scale(1.04); }
+.hero__frame--main {
+  top: 40px; right: 0; width: 86%; height: 70%;
+  box-shadow: 0 40px 80px -28px rgba(28,43,49,0.28);
+}
+.hero__frame--sub {
+  bottom: 0; left: 0; width: 44%; height: 36%;
+  box-shadow: 0 30px 60px -22px rgba(28,43,49,0.22);
+}
+.hero__frame-label {
+  position: absolute;
+  bottom: 12px; left: 12px;
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--cream);
+  background: rgba(13,15,11,0.72);
+  backdrop-filter: blur(6px);
+  padding: 5px 9px;
+}
+.sprocket {
+  position: absolute;
+  width: 100%; left: 0; height: 16px;
+  display: flex; gap: 10px; padding: 4px 12px; align-items: center;
+  background: rgba(13,15,11,0.55);
+  z-index: 2;
+  pointer-events: none;
+}
+.sprocket--top { top: 0; }
+.sprocket--bot { bottom: 0; }
+.sprocket span {
+  flex: 1; height: 7px; background: rgba(241,235,217,0.82); border-radius: 1px;
+}
+
+.hero__clap {
+  position: absolute;
+  top: 0; left: 0;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--amber);
+  z-index: 3;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.hero__clap span:first-child { color: var(--ink-dim); font-size: 10px; }
+
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; padding-top: 120px; }
+  .hero__stage { min-height: 480px; margin-top: 40px; }
+}
+
+/* ====== TICKER ====== */
+.ticker {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg-soft);
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+.ticker__track {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll-x 45s linear infinite;
+}
+.ticker__item {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-size: clamp(28px, 4vw, 56px);
+  line-height: 1;
+  padding: 22px 40px;
+  color: var(--ink);
+  display: flex; align-items: center; gap: 40px;
+}
+.ticker__item .bullet {
+  color: var(--amber);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-style: normal;
+}
+.ticker__item .price {
+  font-family: var(--ff-mono);
+  font-size: 14px;
+  font-style: normal;
+  color: var(--amber);
+  letter-spacing: 0.12em;
+  padding-top: 0.2em;
+}
+@keyframes scroll-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ====== SECTION HEADER ====== */
+.chapter {
+  display: flex; align-items: baseline; gap: 20px;
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.chapter .no {
+  color: var(--ink-mute);
+}
+.section {
+  position: relative;
+  padding: 120px var(--pad);
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/* ====== STORY ====== */
+.story {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: clamp(40px, 7vw, 120px);
+  align-items: start;
+}
+.story__img-wrap {
+  position: sticky; top: 100px;
+}
+.story__img {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  background: var(--bg-soft);
+  box-shadow: 0 30px 60px -24px rgba(28,43,49,0.25);
+}
+.story__img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.85) contrast(1.1);
+}
+.story__caption {
+  margin-top: 14px;
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-dim);
+  display: flex; justify-content: space-between;
+}
+.story__h {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(42px, 5.5vw, 88px);
+  line-height: 0.96;
+  letter-spacing: -0.028em;
+  margin-bottom: 40px;
+}
+.story__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.story__body p {
+  max-width: 54ch;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-dim);
+  margin-bottom: 22px;
+}
+.story__body p.dropcap::first-letter {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-style: italic;
+  font-size: 5.4em;
+  line-height: 0.8;
+  float: left;
+  padding: 0.1em 0.15em 0 0;
+  color: var(--amber);
+}
+.story__pull {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-size: clamp(28px, 3vw, 44px);
+  line-height: 1.15;
+  color: var(--ink);
+  border-left: 2px solid var(--amber);
+  padding: 6px 0 6px 28px;
+  margin: 40px 0;
+  max-width: 36ch;
+}
+.story__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+.stat__k {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  font-size: clamp(40px, 4vw, 64px);
+  line-height: 1;
+  color: var(--amber);
+  margin-bottom: 6px;
+}
+.stat__k em { font-style: italic; }
+.stat__l {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+@media (max-width: 900px) {
+  .story { grid-template-columns: 1fr; }
+  .story__img-wrap { position: static; }
+  .story__stats { grid-template-columns: 1fr 1fr; }
+}
+
+/* ====== HARVEST (products) ====== */
+.harvest__intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: end;
+  margin-bottom: 72px;
+}
+.harvest__h {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(48px, 7vw, 112px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+.harvest__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.harvest__desc {
+  font-size: 17px; line-height: 1.65; color: var(--ink-dim);
+  max-width: 48ch;
+}
+
+.grid-harvest {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px 36px;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.card:hover { transform: translateY(-6px); }
+.card__img {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  box-shadow: 0 14px 34px -18px rgba(28,43,49,0.2);
+  transition: box-shadow .5s ease;
+}
+.card:hover .card__img {
+  box-shadow: 0 24px 48px -18px rgba(28,43,49,0.3);
+}
+.card__img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.85) contrast(1.08);
+  transition: transform 1.2s cubic-bezier(.2,.7,.2,1), filter .4s ease;
+}
+.card:hover .card__img img {
+  transform: scale(1.08);
+  filter: saturate(1) contrast(1.15);
+}
+.card__no {
+  position: absolute;
+  top: 14px; left: 14px;
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--cream);
+  background: rgba(13,15,11,0.6);
+  backdrop-filter: blur(4px);
+  padding: 6px 10px;
+  border: 1px solid rgba(237,229,211,0.14);
+}
+.card__price-tag {
+  position: absolute;
+  bottom: 14px; right: 14px;
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  background: rgba(241,235,217,0.94);
+  padding: 6px 14px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(28,43,49,0.15);
+}
+.card__row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.card__name {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 40;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.card__latin {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  color: var(--ink-dim);
+  font-size: 14px;
+}
+.card__note {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-dim);
+  margin-top: 6px;
+}
+.card__foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.card__foot .add {
+  color: var(--ink-mute);
+}
+
+@media (max-width: 1000px) {
+  .grid-harvest { grid-template-columns: repeat(2, 1fr); }
+  .harvest__intro { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 600px) {
+  .grid-harvest { grid-template-columns: 1fr; }
+}
+
+/* ====== APOTHECARY ====== */
+.apothecary {
+  position: relative;
+  background:
+    radial-gradient(70% 55% at 85% 20%, rgba(180,138,58,0.10), transparent 60%),
+    radial-gradient(60% 50% at 10% 90%, rgba(47,90,101,0.07), transparent 60%),
+    var(--bg-soft);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 140px var(--pad);
+  margin-top: 40px;
+  overflow: hidden;
+}
+.apothecary__inner { max-width: var(--maxw); margin: 0 auto; }
+.apothecary__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+.apothecary__img {
+  position: relative;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 40px 80px -28px rgba(28,43,49,0.22);
+}
+.apothecary__img img { width: 82%; filter: drop-shadow(0 22px 32px rgba(28,43,49,0.22)); }
+.apothecary__img::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 50% at 50% 50%, rgba(180,138,58,0.08), transparent 70%);
+}
+.apothecary__h {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(40px, 5vw, 80px);
+  line-height: 0.96;
+  letter-spacing: -0.028em;
+  margin-bottom: 24px;
+}
+.apothecary__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.apothecary__lede {
+  color: var(--ink-dim); font-size: 17px; line-height: 1.65;
+  max-width: 48ch; margin-bottom: 36px;
+}
+.apothecary__list {
+  list-style: none;
+  margin-bottom: 40px;
+}
+.apothecary__list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.apothecary__list li:last-child { border-bottom: 0; }
+.apothecary__list .num {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.18em;
+  color: var(--ink-mute);
+}
+.apothecary__list .name {
+  font-family: var(--ff-display);
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.apothecary__list .name em {
+  font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.apothecary__list .p {
+  font-family: var(--ff-mono); font-size: 14px; color: var(--ink);
+}
+@media (max-width: 900px) {
+  .apothecary__grid { grid-template-columns: 1fr; }
+}
+
+/* ====== FORAGE ====== */
+.forage {
+  position: relative;
+  overflow: hidden;
+  padding: 180px var(--pad);
+}
+.forage__bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(to bottom, var(--bg) 0%, rgba(241,235,217,0.64) 24%, rgba(241,235,217,0.5) 50%, rgba(241,235,217,0.92) 84%, var(--bg) 100%),
+    url("https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/49319b0b-30d3-4896-8d61-a9c4742a3ee4/IMG_0763.jpeg") center/cover;
+  filter: saturate(0.92) contrast(1.0);
+}
+.forage__inner {
+  position: relative; z-index: 2;
+  max-width: var(--maxw); margin: 0 auto;
+}
+.forage__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: end;
+}
+.forage__h {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(48px, 7vw, 120px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+.forage__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; display: block; }
+.forage__body {
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 48ch;
+  margin-bottom: 32px;
+}
+.forage__details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.forage__details > div { padding-top: 20px; border-top: 1px solid var(--rule); }
+.forage__details .k {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+.forage__details .v {
+  font-family: var(--ff-display);
+  font-size: 22px; letter-spacing: -0.01em;
+}
+@media (max-width: 900px) {
+  .forage__grid { grid-template-columns: 1fr; }
+  .forage__details { grid-template-columns: 1fr 1fr; }
+}
+
+/* ====== ORDER ====== */
+.order { text-align: left; }
+.order__h {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(56px, 9vw, 140px);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  margin-bottom: 24px;
+}
+.order__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.order__lede {
+  max-width: 56ch;
+  color: var(--ink-dim);
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 56px;
+}
+.order__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  border: 1px solid var(--rule);
+  background: var(--rule);
+  margin-bottom: 56px;
+}
+.order__card {
+  background: var(--bg);
+  padding: 40px 32px;
+  transition: background .3s ease;
+  position: relative;
+}
+.order__card:hover { background: var(--bg-soft); }
+.order__card .no {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 32px;
+}
+.order__card h4 {
+  font-family: var(--ff-display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  margin-bottom: 12px;
+}
+.order__card h4 em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+.order__card p {
+  font-size: 15px;
+  color: var(--ink-dim);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.order__card a.link {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink);
+  display: inline-flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+  transition: color .2s ease, border-color .2s ease, padding-bottom .2s ease;
+}
+.order__card a.link:hover {
+  color: var(--amber);
+  border-color: var(--amber);
+  padding-bottom: 10px;
+}
+@media (max-width: 900px) {
+  .order__grid { grid-template-columns: 1fr; }
+}
+.order__cta-block {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 32px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.order__cta-block p {
+  font-family: var(--ff-display); font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-size: clamp(22px, 2.5vw, 32px);
+  color: var(--ink);
+}
+
+/* ====== FAQ ====== */
+.faq__h {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(40px, 5vw, 80px);
+  line-height: 0.96;
+  letter-spacing: -0.028em;
+  margin-bottom: 56px;
+}
+.faq__h em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+details.faq__item {
+  border-top: 1px solid var(--rule);
+  padding: 0;
+}
+details.faq__item:last-child { border-bottom: 1px solid var(--rule); }
+details.faq__item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 28px 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 32px;
+  font-family: var(--ff-display);
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  transition: color .3s ease;
+}
+details.faq__item summary::-webkit-details-marker { display: none; }
+details.faq__item summary::after {
+  content: "+";
+  font-family: var(--ff-display);
+  font-weight: 300;
+  color: var(--amber);
+  font-size: 40px;
+  line-height: 0.5;
+  transition: transform .4s cubic-bezier(.2,.7,.2,1);
+  flex-shrink: 0;
+}
+details.faq__item[open] summary::after { transform: rotate(45deg); }
+details.faq__item[open] summary { color: var(--amber); }
+details.faq__item .answer {
+  padding: 0 0 32px 0;
+  color: var(--ink-dim);
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 64ch;
+}
+
+/* ====== FOOTER ====== */
+.footer {
+  position: relative;
+  background: var(--bg-soft);
+  border-top: 1px solid var(--rule);
+  padding: 100px var(--pad) 40px;
+  overflow: hidden;
+}
+.footer__mark {
+  display: flex; align-items: center; gap: 20px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 60px;
+}
+.footer__mark img {
+  width: 96px; height: 96px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(28,43,49,0.2));
+}
+.footer__mark .meta {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  line-height: 1.9;
+}
+.footer__mark .meta strong {
+  color: var(--amber); font-weight: 500;
+}
+@media (max-width: 600px) {
+  .footer__mark img { width: 72px; height: 72px; }
+}
+.footer__sign {
+  font-family: var(--ff-display);
+  font-variation-settings: "opsz" 144, "SOFT" 60;
+  font-weight: 300;
+  font-size: clamp(80px, 16vw, 240px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin-bottom: 80px;
+  position: relative;
+}
+.footer__sign em { font-style: italic; color: var(--amber); font-variation-settings: "opsz" 144, "SOFT" 100; }
+
+.footer__cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--rule);
+}
+.footer__col h5 {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+.footer__col p, .footer__col a {
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.7;
+}
+.footer__col a { transition: color .2s ease; display: block; margin-bottom: 4px; }
+.footer__col a:hover { color: var(--amber); }
+.footer__col address { font-style: normal; font-size: 15px; color: var(--ink-dim); line-height: 1.7; }
+
+
+
+.footer__bot {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  padding-top: 24px;
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-mute);
+}
+@media (max-width: 900px) {
+  .footer__cols { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .footer__cols { grid-template-columns: 1fr; }
+}
+
+/* ====== REVEAL ANIMATIONS ====== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--d, 0s);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+  .ticker__track { animation: none; }
+  .grain { animation: none; }
+}
+
+/* ====== SCROLLBAR ====== */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg-lift); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--ochre); }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+<div class="grain"></div>
+
+<!-- ====== NAV ====== -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav__brand" aria-label="Chiltern Hills Mushrooms — home">
+    <img src="assets/logo.png" alt="Chiltern Hills Mushrooms logo" />
+    <span class="nav__brand-text">
+      <span class="name">Chiltern Hills <em>Mushrooms</em></span>
+      <span class="tag">Est. MMXXV · HP14 4BS</span>
+    </span>
+  </a>
+  <div class="nav__links">
+    <a href="#story">Story</a>
+    <a href="#harvest">Harvest</a>
+    <a href="#apothecary">Apothecary</a>
+    <a href="#forage">Foraging</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a href="#order" class="nav__cta">Order →</a>
+</nav>
+
+<!-- ====== HERO ====== -->
+<header class="hero">
+  <div class="hero__left">
+    <div class="hero__meta reveal">
+      <span class="dot"></span>
+      <span>Reel 01 &nbsp;/&nbsp; The Harvest</span>
+      <span>·</span>
+      <span>HP14 4BS · Est. MMXXV</span>
+    </div>
+    <h1 class="hero__title reveal" style="--d:.1s">
+      From final cut
+      <em>to first flush.</em>
+    </h1>
+    <p class="hero__lede reveal" style="--d:.2s">
+      Small-batch gourmet mushrooms, grown in the Chiltern Hills by a former award-winning film editor. Cut at dawn, delivered the same day — to kitchens, markets, and front doors within 10 miles of HP14.
+    </p>
+    <div class="hero__actions reveal" style="--d:.3s">
+      <a href="#order" class="btn btn--primary">
+        Order this week's harvest
+        <span class="arrow">→</span>
+      </a>
+      <a href="#story" class="btn btn--ghost">
+        Meet the Head Fun-guy
+      </a>
+    </div>
+  </div>
+
+  <div class="hero__stage reveal" style="--d:.4s">
+    <div class="hero__clap">
+      <span>Scene 01 / Take 07</span>
+      <span>24 · 04 · 26  •  05:42</span>
+    </div>
+
+    <div class="hero__frame hero__frame--main">
+      <div class="sprocket sprocket--top"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <img src="https://img1.wsimg.com/isteam/ip/9228ed1c-0306-4cdf-9812-13fbf2a978b0/downloads/adde7588-5ced-432b-93e7-43dfdf25b80d/IMG_1282.JPG" alt="A flush of cultivated mushrooms harvested on the farm" />
+      <div class="hero__frame-label">Cam A · Fruiting Room 02</div>
+      <div class="sprocket sprocket--bot"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+
+    <div class="hero__frame hero__frame--sub">
+      <div class="sprocket sprocket--top"><span></span><span></span><span></span><span></span><span></span></div>
+      <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/ab6fc2c0-d42e-4296-838c-b7a297802ec5/IMG_0903.jpeg" alt="Lion's Mane mushroom close-up" />
+      <div class="hero__frame-label">Lion's Mane · Hand-cut</div>
+      <div class="sprocket sprocket--bot"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== TICKER ====== -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <div class="ticker__item">Lion's Mane <span class="price">£30/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">King Oyster <span class="price">£28/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Grey Oyster <span class="price">£24/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Shiitake <span class="price">£24/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Chestnut <span class="price">£22/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Golden Oyster <span class="price">£22/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Cut at dawn. <span class="bullet">✱</span></div>
+    <div class="ticker__item">Lion's Mane <span class="price">£30/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">King Oyster <span class="price">£28/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Grey Oyster <span class="price">£24/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Shiitake <span class="price">£24/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Chestnut <span class="price">£22/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Golden Oyster <span class="price">£22/kg</span> <span class="bullet">✱</span></div>
+    <div class="ticker__item">Cut at dawn. <span class="bullet">✱</span></div>
+  </div>
+</div>
+
+<!-- ====== STORY ====== -->
+<section class="section story" id="story">
+  <div class="story__img-wrap reveal">
+    <div class="story__img">
+      <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/8e5740da-7ac3-44b4-bb97-e28988e76865/IMG_0819.jpeg" alt="Iain Mitchell, the Head Fun-guy, at work in the growing rooms" />
+    </div>
+    <div class="story__caption">
+      <span>Iain Mitchell · The Head Fun-guy</span>
+      <span>35mm · ƒ/2</span>
+    </div>
+  </div>
+
+  <div class="story__text">
+    <div class="chapter reveal">
+      <span class="no">Reel 02</span>
+      <span>From final cut to first fruiting</span>
+    </div>
+
+    <h2 class="story__h reveal" style="--d:.1s">
+      After thirty-five years<br>at the cutting-edge,<br>
+      <em>he started cutting</em><br>
+      <em>something else.</em>
+    </h2>
+
+    <div class="story__body">
+      <p class="dropcap reveal" style="--d:.15s">Iain Mitchell spent a thirty-five-year career splicing together some of the most-watched television in Britain — an award-winning film editor whose final commission, fittingly, was a certain farming series you may have heard of. Somewhere between the Clarkson fields and the farm-shop walk-ins, a question took root. <em>What if the thing on the chopping board came from fifty feet away, not five thousand miles?</em></p>
+
+      <p class="reveal" style="--d:.2s">In October 2025, he swapped the edit suite for a growing room on Bottom Road, West Wycombe. Six varieties. Hand-cut. Harvested at dawn, in the kitchen by lunch. Mycelium grown on locally-sourced substrate. Fruiting rooms dialed in like an audio mix — humidity, CO₂, temperature, light. Nothing flown. Nothing forgotten in transit.</p>
+
+      <blockquote class="story__pull reveal" style="--d:.25s">
+        "I spent thirty-five years making pictures move. Now I'm watching mushrooms grow. Honestly? Both feel like magic."
+      </blockquote>
+
+      <p class="reveal" style="--d:.3s">The farm supplies local farmers' markets, farm shops, pubs and restaurants within the Chiltern Hills — and posts a weekly harvest list to a small network of home cooks who like knowing the name of the person who grew their dinner. If that sounds like you, you're in the right place.</p>
+    </div>
+
+    <div class="story__stats reveal" style="--d:.35s">
+      <div>
+        <div class="stat__k"><em>24</em>h</div>
+        <div class="stat__l">Cut to Delivery</div>
+      </div>
+      <div>
+        <div class="stat__k">6</div>
+        <div class="stat__l">Gourmet Varieties</div>
+      </div>
+      <div>
+        <div class="stat__k">10<span style="color:var(--ink-dim)">mi</span></div>
+        <div class="stat__l">Free Delivery Radius</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== HARVEST ====== -->
+<section class="section" id="harvest">
+  <div class="chapter reveal">
+    <span class="no">Reel 03</span>
+    <span>This week's harvest</span>
+  </div>
+
+  <div class="harvest__intro">
+    <h2 class="harvest__h reveal">
+      Six varieties.<br>
+      <em>Six ways to cook dinner.</em>
+    </h2>
+    <p class="harvest__desc reveal" style="--d:.1s">
+      Prices per kilo, though most home cooks order by the 200g–400g tub. Pop the minimum on the order slip below and we'll email a confirmation with collection or delivery times.
+    </p>
+  </div>
+
+  <div class="grid-harvest">
+
+    <article class="card reveal">
+      <div class="card__img">
+        <span class="card__no">No. 01</span>
+        <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/ab6fc2c0-d42e-4296-838c-b7a297802ec5/IMG_0903.jpeg" alt="Lion's Mane" />
+        <span class="card__price-tag">£30 / kg</span>
+      </div>
+      <div class="card__row">
+        <h3 class="card__name">Lion's Mane</h3>
+        <span class="card__latin">Hericium erinaceus</span>
+      </div>
+      <p class="card__note">Mild and sweet with a seafood-like finish — fry in brown butter and you've made crab cakes without the crab.</p>
+      <div class="card__foot"><span>Cognitive · Culinary</span><span class="add">On this week’s list</span></div>
+    </article>
+
+    <article class="card reveal" style="--d:.1s">
+      <div class="card__img">
+        <span class="card__no">No. 02</span>
+        <img src="https://img1.wsimg.com/isteam/getty/1180089653" alt="King Oyster" />
+        <span class="card__price-tag">£28 / kg</span>
+      </div>
+      <div class="card__row">
+        <h3 class="card__name">King Oyster</h3>
+        <span class="card__latin">Pleurotus eryngii</span>
+      </div>
+      <p class="card__note">The vegan scallop. Thick-stemmed, meaty, beautifully pan-seared in rings with garlic, thyme and a squeeze of lemon.</p>
+      <div class="card__foot"><span>Meaty · Show-stopper</span><span class="add">On this week’s list</span></div>
+    </article>
+
+    <article class="card reveal" style="--d:.2s">
+      <div class="card__img">
+        <span class="card__no">No. 03</span>
+        <img src="https://img1.wsimg.com/isteam/ip/0fb9f2bc-439b-4813-a6e2-4850d8b2ec9d/downloads/49319b0b-30d3-4896-8d61-a9c4742a3ee4/IMG_0763.jpeg" alt="Grey Oyster" />
+        <span class="card__price-tag">£24 / kg</span>
+      </div>
+      <div class="card__row">
+        <h3 class="card__name">Grey Oyster</h3>
+        <span class="card__latin">Pleurotus ostreatus</span>
+      </div>
+      <p class="card__note">Tender, velvety, unfussy. The everyday workhorse — risotto, ragù, soup, pasta, or just hot oil and salt.</p>
+      <div class="card__foot"><span>Everyday · Versatile</span><span class="add">On this week’s list</span></div>
+    </article>
+
+    <article class="card reveal">
+      <div class="card__img">
+        <span class="card__no">No. 04</span>
+        <img src="https://img1.wsimg.com/isteam/getty/1487104488" alt="Shiitake" />
+        <span class="card__price-tag">£24 / kg</span>
+      </div>
+      <div class="card__row">
+        <h3 class="card__name">Shiitake</h3>
+        <span class="card__latin">Lentinula edodes</span>
+      </div>
+      <p class="card__note">Deep, meaty umami. Broths, ramens, stir-fries and slow braises — the one mushroom that tastes as good dried as fresh.</p>
+      <div class="card__foot"><span>Umami · Asian Kitchen</span><span class="add">On this week’s list</span></div>
+    </article>
+
+    <article class="card reveal" style="--d:.1s">
+      <div class="card__img">
+        <span class="card__no">No. 05</span>
+        <img src="https://img1.wsimg.com/isteam/getty/2233604126" alt="Speckled Chestnut" />
+        <span class="card__price-tag">£22 / kg</span>
+      </div>
+      <div class="card__row">
+        <h3 class="card__name">Speckled Chestnut</h3>
+        <span class="card__latin">Pholiota nameko</span>
+      </div>
+      <p class="card__note">Earthy, nutty, gently peppery. A gorgeous thing with lamb, lentils, or a fat slice of sourdough and ricotta.</p>
+      <div class="card__foot"><span>Earthy · Forest-Floor</span><span class="add">On this week’s list</span></div>
+    </article>
+
+    <article class="card reveal" style="--d:.2s">
+      <div class="card__img">
+        <span class="card__no">No. 06</span>
+        <img src="https://img1.wsimg.com/isteam/getty/2233774959" alt="Golden Oyster" />
+        <span class="card__price-tag">£22 / kg</span>
+      </div>
+      <div class="card__row">
+        <h3 class="card__name">Golden Oyster</h3>
+        <span class="card__latin">Pleurotus citrinopileatus</span>
+      </div>
+      <p class="card__note">Thin-fleshed, bright-yellow, quick-cooking. Hot pan, thirty seconds a side, straight onto a garlic-rubbed bruschetta.</p>
+      <div class="card__foot"><span>Bright · Fast-Fry</span><span class="add">On this week’s list</span></div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ====== APOTHECARY ====== -->
+<section class="apothecary" id="apothecary">
+  <div class="apothecary__inner">
+    <div class="chapter reveal">
+      <span class="no">Reel 04</span>
+      <span>The Apothecary</span>
+    </div>
+
+    <div class="apothecary__grid">
+      <div class="apothecary__img reveal">
+        <img src="https://img1.wsimg.com/isteam/ip/9228ed1c-0306-4cdf-9812-13fbf2a978b0/downloads/6244238d-d10c-4bc9-a1e6-db8d20e499b1/everything_bundle_new.png.webp" alt="Bristol Fungarium tinctures and Chiltern Hills complementary products" />
+      </div>
+
+      <div class="apothecary__text reveal" style="--d:.1s">
+        <h2 class="apothecary__h">
+          The quiet <em>medicine cabinet</em><br>of the fungi kingdom.
+        </h2>
+        <p class="apothecary__lede">
+          We stock carefully-chosen companion products from trusted British makers — because the best fresh mushrooms deserve a shelf of friends. Dual-extracted tinctures, single-origin cacao, stone-ground cocoa.
+        </p>
+
+        <ul class="apothecary__list">
+          <li>
+            <span class="num">T / 01</span>
+            <span class="name"><em>Lion's Mane</em> Tincture · Bristol Fungarium</span>
+            <span class="p">£30</span>
+          </li>
+          <li>
+            <span class="num">T / 02</span>
+            <span class="name"><em>Reishi</em> Tincture · Bristol Fungarium</span>
+            <span class="p">£30</span>
+          </li>
+          <li>
+            <span class="num">T / 03</span>
+            <span class="name"><em>Cordyceps</em> Tincture · Bristol Fungarium</span>
+            <span class="p">£30</span>
+          </li>
+          <li>
+            <span class="num">T / 04</span>
+            <span class="name"><em>Turkey Tail</em> Tincture · Bristol Fungarium</span>
+            <span class="p">£30</span>
+          </li>
+          <li>
+            <span class="num">T / 05</span>
+            <span class="name"><em>Chaga</em> Tincture · Bristol Fungarium</span>
+            <span class="p">£30</span>
+          </li>
+          <li>
+            <span class="num">C / 06</span>
+            <span class="name">Lion's Mane <em>Hot Chocolate</em></span>
+            <span class="p">POA</span>
+          </li>
+          <li>
+            <span class="num">C / 07</span>
+            <span class="name">Lion's Mane <em>Chocolate Bars</em></span>
+            <span class="p">POA</span>
+          </li>
+        </ul>
+
+        <a href="#order" class="btn btn--ghost">
+          Add to your order
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FORAGE ====== -->
+<section class="forage" id="forage">
+  <div class="forage__bg"></div>
+  <div class="forage__inner">
+    <div class="chapter reveal">
+      <span class="no">Reel 05</span>
+      <span>Into the woods</span>
+    </div>
+
+    <div class="forage__grid">
+      <h2 class="forage__h reveal" style="--d:.1s">
+        Foraging<br>
+        <em>workshops</em><br>
+        <em>in the Chilterns.</em>
+      </h2>
+      <div class="reveal" style="--d:.2s">
+        <p class="forage__body">
+          A small-group walk through the beech woods above the farm with Iain and a flask of something warm. Learn what to look for, what to leave, and how to cook the ten or so edibles that reliably turn up on a Chiltern autumn morning. Flat shoes. Sharp eyes. Empty basket.
+        </p>
+
+        <div class="forage__details">
+          <div>
+            <div class="k">Season</div>
+            <div class="v">Sep — Nov</div>
+          </div>
+          <div>
+            <div class="k">Group size</div>
+            <div class="v">Max 8</div>
+          </div>
+          <div>
+            <div class="k">Meeting point</div>
+            <div class="v">HP14 4BS</div>
+          </div>
+        </div>
+
+        <a href="#order" class="btn btn--primary">
+          Enquire about workshops
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== ORDER ====== -->
+<section class="section order" id="order">
+  <div class="chapter reveal">
+    <span class="no">Reel 06</span>
+    <span>Cut. Delivered. Cooked.</span>
+  </div>
+
+  <h2 class="order__h reveal" style="--d:.1s">
+    Three ways to<br>
+    <em>get them home.</em>
+  </h2>
+  <p class="order__lede reveal" style="--d:.15s">
+    Drop a line before Thursday 8pm to be on the weekend harvest list. We'll confirm by return with what's ready, when to expect it, and how to pay (bank transfer, cash on delivery, or card at the farm gate).
+  </p>
+
+  <div class="order__grid">
+    <div class="order__card reveal">
+      <div class="no">01 / Email</div>
+      <h4>Write to the <em>Head Fun-guy.</em></h4>
+      <p>The quickest route — send a list, a rough weight, and a postcode. Iain reads every message and replies personally, usually within the day.</p>
+      <a class="link" href="mailto:chmushrooms@icloud.com">chmushrooms@icloud.com →</a>
+    </div>
+
+    <div class="order__card reveal" style="--d:.1s">
+      <div class="no">02 / Phone</div>
+      <h4>Or <em>give him a ring.</em></h4>
+      <p>Prefer a voice? A quick call beats three emails. Leave a message if he's in the growing rooms and he'll get back before the kettle boils.</p>
+      <a class="link" href="tel:+447949026535">07949 026 535 →</a>
+    </div>
+
+    <div class="order__card reveal" style="--d:.2s">
+      <div class="no">03 / Farm Gate</div>
+      <h4>Or <em>come and visit.</em></h4>
+      <p>Collect in person from Bottom Road, West Wycombe. Peek at the growing rooms, pick out what you fancy, and leave with cash, card or a handshake.</p>
+      <a class="link" href="https://maps.google.com/?q=HP14+4BS" target="_blank" rel="noopener">Bottom Road, HP14 4BS →</a>
+    </div>
+  </div>
+
+  <div class="order__cta-block reveal">
+    <p>Free delivery within 10&nbsp;miles of HP14 &mdash; always.</p>
+    <a href="mailto:chmushrooms@icloud.com?subject=This%20week%27s%20harvest" class="btn btn--primary">
+      Start your order
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ====== FAQ ====== -->
+<section class="section" id="faq">
+  <div class="chapter reveal">
+    <span class="no">Reel 07</span>
+    <span>Frequently asked</span>
+  </div>
+
+  <h2 class="faq__h reveal">
+    Nine small things,<br>
+    <em>answered.</em>
+  </h2>
+
+  <div class="faq__list">
+    <details class="faq__item reveal">
+      <summary>How fresh are these, really?</summary>
+      <div class="answer">Cut the morning of delivery. If you order for Saturday, the mushrooms you unwrap were still growing on Friday night. That's why we deliver within roughly 10 miles — further than that and the numbers stop working.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>Do you grow organically?</summary>
+      <div class="answer">We grow with sustainable, low-impact methods: no pesticides, no fungicides, UK-sourced substrate where possible, and we re-use spent blocks as garden compost for neighbours. Certified-organic paperwork is in progress for 2026.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>What's the minimum order?</summary>
+      <div class="answer">One 200g tub of any variety for delivery; anything goes at the farm gate. For restaurants and pubs, we usually start around 2kg a week across varieties — get in touch and we'll size it to your menu.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>How long will they keep?</summary>
+      <div class="answer">Stored loose in a paper bag at the bottom of the fridge: five to seven days for oysters and chestnuts, seven to ten for shiitake and lion's mane. Never in plastic — they want to breathe.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>Can I visit the farm?</summary>
+      <div class="answer">Yes — by arrangement. Drop us an email first so Iain isn't elbow-deep in a fruiting chamber when you arrive. Foraging-workshop dates are also shared by email each autumn — just ask to be told.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>Do you ship nationally?</summary>
+      <div class="answer">Not at the moment. Our whole model is: cut in the Chilterns, eaten in the Chilterns. A courier-ready pack-out may come in 2027 — drop us an email if you'd like to be told.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>Are the mushrooms wild-foraged?</summary>
+      <div class="answer">The six varieties on the weekly list are cultivated on the farm. The foraging workshops are where we go for the wild stuff — ceps, chanterelles, hedgehogs, horns of plenty and whatever the Chiltern woods have decided to put up that week.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>Do you supply trade?</summary>
+      <div class="answer">Very happily. We currently work with a handful of pubs, restaurants and farm shops across Bucks and south Oxon. Drop us a line for the trade sheet and current lead times.</div>
+    </details>
+    <details class="faq__item reveal">
+      <summary>Why "Head Fun-guy"?</summary>
+      <div class="answer">Because every farm needs one. And because after thirty-five years in the edit suite, you're allowed a pun.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer class="footer">
+  <div class="footer__mark reveal">
+    <img src="assets/logo.png" alt="Chiltern Hills Mushrooms" />
+    <div class="meta">
+      <div><strong>Chiltern Hills Mushrooms</strong></div>
+      <div>Bottom Road · West Wycombe · HP14 4BS</div>
+      <div>Est. MMXXV · The Head Fun-guy</div>
+    </div>
+  </div>
+
+  <h2 class="footer__sign reveal">
+    Cut at dawn.<br>
+    <em>Eaten by dusk.</em>
+  </h2>
+
+  <div class="footer__cols">
+    <div class="footer__col">
+      <h5>The Farm</h5>
+      <p style="margin-bottom:16px">Chiltern Hills Mushrooms is a small-batch gourmet farm on Bottom Road, West Wycombe — growing six varieties and running foraging walks into the surrounding beech woods.</p>
+    </div>
+    <div class="footer__col">
+      <h5>Explore</h5>
+      <a href="#story">Our Story</a>
+      <a href="#harvest">The Harvest</a>
+      <a href="#apothecary">Apothecary</a>
+      <a href="#forage">Foraging</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer__col">
+      <h5>Find Us</h5>
+      <address>
+        Bottom Road<br>
+        West Wycombe<br>
+        HP14 4BS<br>
+        United Kingdom
+      </address>
+    </div>
+    <div class="footer__col">
+      <h5>Get In Touch</h5>
+      <a href="mailto:chmushrooms@icloud.com">chmushrooms@icloud.com</a>
+      <a href="tel:+447949026535">07949 026 535</a>
+      <div style="margin-top:16px">
+        <a href="https://instagram.com/chilternhillsmushrooms" target="_blank" rel="noopener">Instagram ↗</a>
+        <a href="#" target="_blank" rel="noopener">Facebook ↗</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__bot">
+    <span>© 2026 Chiltern Hills Mushrooms · Est. MMXXV</span>
+    <span>Designed like a film, grown like a forest.</span>
+  </div>
+</footer>
+
+<script>
+  // Nav background on scroll
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll via IntersectionObserver
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Parallax drift on the hero stage frames
+  const stage = document.querySelector('.hero__stage');
+  if (stage && window.matchMedia('(min-width: 961px)').matches) {
+    const main = stage.querySelector('.hero__frame--main');
+    const sub  = stage.querySelector('.hero__frame--sub');
+    stage.addEventListener('mousemove', (ev) => {
+      const r = stage.getBoundingClientRect();
+      const x = (ev.clientX - r.left) / r.width - 0.5;
+      const y = (ev.clientY - r.top) / r.height - 0.5;
+      main.style.transform = `translate(${x * -10}px, ${y * -6}px)`;
+      sub.style.transform  = `translate(${x * 14}px, ${y * 10}px)`;
+    });
+    stage.addEventListener('mouseleave', () => {
+      main.style.transform = '';
+      sub.style.transform = '';
+    });
+  }
+</script>
+</body>
+</html>
