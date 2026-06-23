@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://widei.github.io/Chilternhills-mushrooms/sitemap.xml
