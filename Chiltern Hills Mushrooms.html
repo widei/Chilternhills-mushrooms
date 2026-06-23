@@ -983,6 +983,20 @@ details.faq__item .answer {
 .footer__col a { transition: color .2s ease; display: block; margin-bottom: 4px; }
 .footer__col a:hover { color: var(--amber); }
 .footer__col address { font-style: normal; font-size: 15px; color: var(--ink-dim); line-height: 1.7; }
+.footer__maplink {
+  font-family: var(--ff-mono);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--amber); margin-top: 12px;
+}
+.footer__map {
+  margin-top: 16px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  filter: grayscale(0.35) sepia(0.12) contrast(0.96);
+  box-shadow: 0 8px 24px rgba(28,43,49,0.12);
+}
+.footer__map iframe { display: block; }
 
 
 
@@ -1525,6 +1539,14 @@ details.faq__item .answer {
         HP14 4BS<br>
         United Kingdom
       </address>
+      <a class="footer__maplink" href="https://www.google.com/maps/search/?api=1&query=Chiltern+Hills+Mushrooms+Bottom+Road+HP14+4BS" target="_blank" rel="noopener">Open in Maps ↗</a>
+      <div class="footer__map">
+        <iframe
+          title="Map to Chiltern Hills Mushrooms, Bottom Road, HP14 4BS"
+          src="https://maps.google.com/maps?q=Bottom%20Road%2C%20West%20Wycombe%2C%20HP14%204BS&z=13&output=embed"
+          width="100%" height="180" style="border:0;" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
     </div>
     <div class="footer__col">
       <h5>Get In Touch</h5>
