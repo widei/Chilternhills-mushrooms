@@ -1004,6 +1004,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   font-size: clamp(38px, 5vw, 56px); line-height: 0.9; color: var(--ink);
 }
 .basket__total-sub { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-mute); }
+.basket__delivery { font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--moss-deep); margin-top: 2px; }
+.basket__delivery.is-fee { color: var(--rust); }
 .basket__actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .basket__actions .btn:disabled { opacity: .4; pointer-events: none; }
 .basket__legal {
@@ -1668,7 +1670,7 @@ details.faq__item .answer {
   </div>
 
   <div class="order__cta-block reveal">
-    <p>Free delivery within 10&nbsp;miles of HP14 &mdash; always.</p>
+    <p>Free local delivery over £30 &mdash; within 10&nbsp;miles of HP14.</p>
     <a href="#basket" class="btn btn--primary">
       Start your order
       <span class="arrow">→</span>
@@ -1703,6 +1705,7 @@ details.faq__item .answer {
         <span class="basket__total-k">Estimated total</span>
         <strong class="basket__total-v" id="basket-total">£0.00</strong>
         <span class="basket__total-sub" id="basket-weight">Nothing picked yet</span>
+        <span class="basket__delivery" id="basket-delivery"></span>
       </div>
       <div class="basket__actions">
         <button type="button" class="btn btn--primary" id="basket-wa" disabled>
@@ -1714,7 +1717,7 @@ details.faq__item .answer {
         </button>
       </div>
     </div>
-    <p class="basket__legal">Minimum order 200g. Prices are per kilo, cut fresh — final figure confirmed before you pay.</p>
+    <p class="basket__legal">Minimum order 200g. Prices are per kilo, cut fresh. Local delivery £3.50, free over £30 — within 10 miles of HP14. Final figure confirmed before you pay.</p>
   </div>
 
   <div class="contact reveal" id="contact">
@@ -1766,6 +1769,10 @@ details.faq__item .answer {
         </label>
       </div>
       <label class="cform__field cform__field--full">
+        <span>Delivery address <em>(for local delivery)</em></span>
+        <input type="text" name="address" autocomplete="street-address" placeholder="House &amp; street, area">
+      </label>
+      <label class="cform__field cform__field--full">
         <span>Your order / message</span>
         <textarea name="message" rows="4" required placeholder="e.g. 400g oyster, 200g lion's mane, for Saturday…"></textarea>
       </label>
@@ -1775,7 +1782,7 @@ details.faq__item .answer {
           Send to the farm
           <span class="arrow">→</span>
         </button>
-        <p class="cform__note">Free delivery within 10&nbsp;miles of HP14 — always.</p>
+        <p class="cform__note">Free local delivery over £30 — within 10&nbsp;miles of HP14.</p>
       </div>
       <p class="cform__status" id="cform-status" role="status" aria-live="polite"></p>
     </form>
@@ -1988,6 +1995,8 @@ details.faq__item .answer {
   const STEP = 100;        // grams per click (fresh)
   const MIN_GRAMS = 200;   // minimum fresh order
   const PHONE = '447949026535';
+  const FREE_OVER = 30;    // free local delivery over this subtotal (£)
+  const DELIVERY_FEE = 3.50; // flat local delivery fee under the threshold (£)
 
   const rowsEl = document.getElementById('basket-rows');
   if (rowsEl) {
@@ -1997,6 +2006,7 @@ details.faq__item .answer {
     const weightEl = document.getElementById('basket-weight');
     const waBtn    = document.getElementById('basket-wa');
     const msgBtn   = document.getElementById('basket-msg');
+    const deliveryEl = document.getElementById('basket-delivery');
     const cartBadge = document.getElementById('cart-badge');
     let lastCount = 0;
     function updateBadge(n) {
@@ -2098,12 +2108,27 @@ details.faq__item .answer {
       emptyEl.style.display = fresh.length ? 'none' : '';
     }
 
+    function deliveryFor(subtotal) { return subtotal > 0 && subtotal < FREE_OVER ? DELIVERY_FEE : 0; }
+
     function recompute() {
       const fresh = freshPicked(), tinc = tincPicked();
       renderSummary(fresh);
       const grams = fresh.reduce((s, p) => s + p.qty, 0);
-      const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
-      totalEl.textContent = gbp(total);
+      const subtotal = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
+      const delivery = deliveryFor(subtotal);
+      totalEl.textContent = gbp(subtotal + delivery);
+      // Delivery note: free over threshold, else flat fee + "spend more" nudge.
+      if (subtotal === 0) {
+        deliveryEl.textContent = '';
+        deliveryEl.classList.remove('is-fee');
+      } else if (delivery === 0) {
+        deliveryEl.textContent = 'Free local delivery ✓';
+        deliveryEl.classList.remove('is-fee');
+      } else {
+        const more = (FREE_OVER - subtotal).toFixed(2);
+        deliveryEl.textContent = 'incl. ' + gbp(DELIVERY_FEE) + ' delivery · £' + more + ' more for free';
+        deliveryEl.classList.add('is-fee');
+      }
       // Ready if the fresh order clears 200g, or there's at least one tincture.
       const freshOk = grams >= MIN_GRAMS;
       const ready = freshOk || (grams === 0 && tinc.length > 0);
@@ -2123,15 +2148,19 @@ details.faq__item .answer {
     }
     function orderText() {
       const fresh = freshPicked(), tinc = tincPicked();
-      const total = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
+      const subtotal = [...fresh, ...tinc].reduce((s, p) => s + p.sub, 0);
+      const delivery = deliveryFor(subtotal);
       let body = fresh.map(p => '• ' + p.qty + 'g ' + p.name + ' — ' + gbp(p.sub)).join('\n');
       if (tinc.length) {
         if (body) body += '\n';
         body += tinc.map(p => '• ' + p.qty + ' × ' + p.name + ' — ' + gbp(p.sub)).join('\n');
       }
+      const totals = 'Subtotal: ' + gbp(subtotal) + '\n' +
+        'Delivery: ' + (delivery === 0 ? 'Free' : gbp(delivery)) + '\n' +
+        'Estimated total: ' + gbp(subtotal + delivery);
       return 'Chiltern Hills Mushrooms — order ' + orderRef() + '\n' +
         '(' + orderWindow().label + ')\n\n' +
-        body + '\n\nEstimated total: ' + gbp(total) +
+        body + '\n\n' + totals +
         '\n(Final weight & price to be confirmed.)';
     }
 
