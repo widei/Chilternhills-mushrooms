@@ -1943,9 +1943,6 @@ details.faq__item .answer {
     </div>
   </div>
 
-  <audio id="ambient-track" loop preload="auto">
-    <source src="uploads/chiltern-hills-audio.mp3" type="audio/mpeg">
-  </audio>
 
   <div class="footer__bot">
     <span>© 2026 Chiltern Hills Mushrooms · Est. MMXXV</span>
@@ -2306,33 +2303,6 @@ details.faq__item .answer {
     });
   });
 
-  // Ambient farm audio: try to autoplay once the page is ready; if the browser
-  // blocks sound-on autoplay, start on the first user gesture instead.
-  (function () {
-    const track = document.getElementById('ambient-track');
-    if (!track) return;
-    track.volume = 0.55;
-    let started = false;
-    const start = () => {
-      if (started) return;
-      const p = track.play();
-      if (p && p.then) {
-        p.then(() => { started = true; }).catch(() => {});
-      } else {
-        started = true;
-      }
-    };
-    const onGesture = () => {
-      start();
-      if (started) {
-        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(ev =>
-          window.removeEventListener(ev, onGesture));
-      }
-    };
-    window.addEventListener('load', start);
-    ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(ev =>
-      window.addEventListener(ev, onGesture, { passive: true }));
-  })();
 </script>
 </body>
 </html>
